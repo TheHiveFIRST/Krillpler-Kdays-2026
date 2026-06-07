@@ -2,9 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.FullHopperIntakeWobbleCommand;
-import frc.robot.commands.IntakeTapCommand;
-import frc.robot.commands.HalfHopperIntakeWobbleCommand;
+
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.ArmSubsystem;
+
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -32,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class RobotContainer {
   private final VisionSubsystem mVisionSubsystem = new VisionSubsystem(); 
   private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
-  private final ArmSubsystem mArmSubsystem = new ArmSubsystem(); 
+ 
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(); 
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
   private final SendableChooser<Command> autoChooser;
@@ -46,21 +44,13 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    NamedCommands.registerCommand("intakepivotslightlyup", mArmSubsystem.IntakeSlightlyUpCommand().withTimeout(1.80));
-    NamedCommands.registerCommand("intakepivotup", mArmSubsystem.IntakeToPositionCommand(0.55).withTimeout(8));
+    
     NamedCommands.registerCommand("runintake", mIntakeSubsystem.runIntakeForwardCommand().withTimeout(5));
 
-    NamedCommands.registerCommand("intakepivotdown", new IntakeTapCommand(mIntakeSubsystem, mArmSubsystem).withTimeout(2.93));
-    NamedCommands.registerCommand("shoot", mShooterSubsystem.setHubShotCommand().andThen(
-                                                mShooterSubsystem.toggleAutoShooterCommand().andThen(
-                                                autoWobbleShoot())));
-    NamedCommands.registerCommand("runkicker", mShooterSubsystem.runKickerCommand().withTimeout(3));                                             
-    NamedCommands.registerCommand("setshot", mShooterSubsystem.toggleAutoShooterCommand().withTimeout(8));
-    NamedCommands.registerCommand("stopshoot", autoStopKicker());
+    
 
    
-     new EventTrigger("setshot").onTrue(mShooterSubsystem.toggleAutoShooterCommand().withTimeout(3));
-     new EventTrigger("intakepivotdown2").whileTrue(new IntakeTapCommand(mIntakeSubsystem, mArmSubsystem));
+
 
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -79,7 +69,7 @@ public class RobotContainer {
                 true);},
             mDriveSubsystem));
 
-        mArmSubsystem.setDefaultCommand(mArmSubsystem.runIntakePivotGroundCommand());
+       
         mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runShooterPower(0), mShooterSubsystem));
         mIntakeSubsystem.setDefaultCommand(new RunCommand(()-> mIntakeSubsystem.runIntake(0), mIntakeSubsystem));
         mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runKicker(0), mShooterSubsystem));
@@ -147,11 +137,10 @@ public class RobotContainer {
         //DRIVER CONTROLS
         mDriverController.y().whileTrue(mShooterSubsystem.toggleShooterCommand()); 
         mDriverController.x().whileTrue(mShooterSubsystem.runKickerBackwardCommand());
-        mDriverController.b().onTrue(mIntakeSubsystem.runOuttakeCommand());
+        
 
-        mDriverController.rightBumper().whileTrue(shootHalfHopper());
-        mDriverController.rightTrigger().whileTrue(shootFullHopper());
-        mDriverController.leftBumper().whileTrue(mArmSubsystem.runIntakePivotBumpCommand());
+        
+     
         mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.runIntakeForwardCommand());
  
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
@@ -196,22 +185,8 @@ public class RobotContainer {
       mDriveSubsystem.zeroHeading();
     }
 
-    public Command shootFullHopper(){
-      return Commands.parallel(           
-      new FullHopperIntakeWobbleCommand(mArmSubsystem, mIntakeSubsystem),
-      mDriveSubsystem.defensePosition(),
-      
-      mShooterSubsystem.runKickerCommand());
-  
-    }
-    public Command shootHalfHopper(){
-      return Commands.parallel(           
-      new HalfHopperIntakeWobbleCommand(mArmSubsystem, mIntakeSubsystem),
-      mDriveSubsystem.defensePosition(),
-      
-      mShooterSubsystem.runKickerCommand());
-  
-    }
+    
+    
     public Command toggleSlowMode(){
         return new InstantCommand(() -> slowMode = !slowMode);
     }
@@ -232,12 +207,7 @@ public class RobotContainer {
   }
 
     
-  public Command autoShoot(){
-    return Commands.parallel(           
-    mShooterSubsystem.runKickerCommand(),
-    new FullHopperIntakeWobbleCommand(mArmSubsystem, mIntakeSubsystem)
-    );
-  }
+  
 
    public Command autoWobbleShoot(){
    return Commands.parallel(   

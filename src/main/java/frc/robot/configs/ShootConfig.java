@@ -34,13 +34,11 @@ public final class ShootConfig {
     }
 
     public static final class IntakeConfigs {
-        public static final SparkFlexConfig intakeMotorConfig = new SparkFlexConfig();
+        // TODO: add code here for cims/pneumatics
         
 
         static {
-            intakeMotorConfig
-                .smartCurrentLimit(80);
-
+            
             
         }
     }

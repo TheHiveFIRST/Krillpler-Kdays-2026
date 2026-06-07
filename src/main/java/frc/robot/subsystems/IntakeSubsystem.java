@@ -11,28 +11,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.configs.ShootConfig.IntakeConfigs;
-
+// TODO: add necessary imports for cims/ talon SRX's
 
 public class IntakeSubsystem extends SubsystemBase {
-
-    private final SparkFlex mIntakeMotor;
+  // declare motors/controllers here
+  
+    
     
 
 
     public IntakeSubsystem() {
-        mIntakeMotor = new SparkFlex(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
-        
-        mIntakeMotor.configure(IntakeConfigs.intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
     }
 
     //Methods 
     public void stopIntake() {
-            runIntake(0);
+           
         }
 
     public void runIntake(double speed){
-            mIntakeMotor.set(speed);
+            
         }
 
 
@@ -44,21 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
               });
     }
 
-    public Command runIntakeSlowCommand() {
-         return run(
-        () -> {
-            runIntake(IntakeConstants.SLOW_INTAKE_SPEED);
-              });
-    }
     
-    
-    public Command runOuttakeCommand() {
-         return run(
-        () -> {
-            runIntake(IntakeConstants.OUTTAKE_SPEED);
-              });
-    }
-
 
     public Command stopIntakeCommand() {
          return run(
