@@ -200,11 +200,9 @@ public final class Constants {
   } 
   
   public static final class IntakeConstants {
-        public static final int INTAKE_MOTOR_ID = 20; //edited from rev hardware client 2
+        public static final int INTAKE_MOTOR_ID = 0; //TODO: correct this once krillpler is built
+        public static final float INTAKING_POWER = 1; 
         
-        public static final double INTAKE_SPEED = -1;
-        public static final double SLOW_INTAKE_SPEED = -0.2;
-        public static final double OUTTAKE_SPEED = 0.5;
     }
 
     public static final class ShooterConstants {
@@ -273,28 +271,14 @@ public final class Constants {
     //];;;;
     //this is nathans code, yet to be tested
 
-    public static final class ArmConstants {
-        public static final int ARM_LEADER_ID = 12;
-        public static final int ARM_FOLLOWER_ID = 13;
+    public static final class HopperConstants {
+        public static final int TOP_ROLLERS_ID = 0;
+        public static final int BELTS_ID = 0;
+        public static final int INDEXER_ID = 0;
+        //TODO: correct these once krillpler is wired
 
-        // PID Gains
-        public static final double ARM_KP = 2; 
-        public static final double ARM_KI = 0.0;
-        public static final double ARM_KD = 0.0;
-
-        public static final double PIVOT_OUT = 0.73;
-        public static final double PIVOT_BUMP = 0.45;  //needs tuning
-        public static final double PIVOT_AGITATE = 0.65;
-        public static final double PIVOT_AGITATE55 = 0.55;
-        public static final double PIVOT_AGITATE45 = 0.45;
-        public static final double PIVOT_AGITATE35 = 0.35;
+       
         
-      
-
-        public static final double PIVOT_IN = 0.24;  //needs tuning
-        public static final double ARM_KP_INCREMENT = 0.01;
-
-        public static final double POSITION_TOLERANCE = 0.1;
     }
 
 }

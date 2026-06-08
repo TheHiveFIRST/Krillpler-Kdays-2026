@@ -45,7 +45,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     
-    NamedCommands.registerCommand("runintake", mIntakeSubsystem.runIntakeForwardCommand().withTimeout(5));
+    
 
     
 
@@ -71,7 +71,7 @@ public class RobotContainer {
 
        
         mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runShooterPower(0), mShooterSubsystem));
-        mIntakeSubsystem.setDefaultCommand(new RunCommand(()-> mIntakeSubsystem.runIntake(0), mIntakeSubsystem));
+        
         
      }
 
@@ -141,14 +141,11 @@ public class RobotContainer {
 
         
      
-        mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.runIntakeForwardCommand());
+        
  
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
         
-        mDriverController.povLeft().onTrue(mShooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        mDriverController.povRight().onTrue(mShooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        mDriverController.povDown().onTrue(mShooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        mDriverController.povUp().onTrue(mShooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+
         /*mDriverController.povLeft().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mDriverController.povRight().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
         mDriverController.povDown().onTrue(toggleSlowMode());

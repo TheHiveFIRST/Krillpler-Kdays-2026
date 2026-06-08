@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.configs.ShootConfig.ShooterConfig;
@@ -46,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final MutVoltage m_appliedVoltage  = Volts.mutable(0);
     private final MutAngle m_encoderAngle    = Rotations.mutable(0);
     private final MutAngularVelocity m_encoderVelocity = RotationsPerSecond.mutable(0);
-    private final SysIdRoutine mSysIdRoutine;
+    
 
    
 
@@ -69,40 +69,7 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterConstants.LEADER_FF_kV, 
         ShooterConstants.LEADER_FF_kA);
 
-        mSysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                Volts.of(2).per(Second),   // ramp rate  – 1 V/s (quasistatic)
-                Volts.of(6),               // step voltage – 4 V  (dynamic)
-                Seconds.of(5)              // timeout per direction
-            ),
-            new SysIdRoutine.Mechanism(
-                // Drive: apply a raw voltage to both shooter motors
-                voltage -> {
-                    double v = voltage.in(Volts);
-                    mShooterLeader  .setVoltage(v);
-                    mShooterFollower.setVoltage(v);
-                },
-                // Log: record voltage, position, and velocity for the leader
-                log -> {
-                    log.motor("shooter-leader")
-                        .voltage(
-                            m_appliedVoltage.mut_replace(
-                                mShooterLeader.getBusVoltage()
-                                    * mShooterLeader.getAppliedOutput(),
-                                Volts))
-                        .angularPosition(
-                            m_encoderAngle.mut_replace(
-                                mShooterLeaderEncoder.getPosition(),
-                                Rotations))
-                        .angularVelocity(
-                            m_encoderVelocity.mut_replace(
-                                // Encoder reports RPM – convert to RPS for WPILib units
-                                mShooterLeaderEncoder.getVelocity() / 60.0,
-                                RotationsPerSecond));
-                },
-                this   // owning subsystem (for requirement tracking)
-            )
-        );
+        
 
     }
 
@@ -380,18 +347,7 @@ public Command setAutoShotCommand() {
 
 
     //sysID tests 
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return mSysIdRoutine.quasistatic(direction);
-    }
-    /**
-     * Dynamic test – applies a voltage step.
-     * Used to fit kA.
-     *
-     * @param direction Forward or Reverse
-     */
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return mSysIdRoutine.dynamic(direction);
-    }
+    
 
     @Override
     public void periodic() {
