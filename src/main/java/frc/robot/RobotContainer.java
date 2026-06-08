@@ -72,7 +72,7 @@ public class RobotContainer {
        
         mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runShooterPower(0), mShooterSubsystem));
         mIntakeSubsystem.setDefaultCommand(new RunCommand(()-> mIntakeSubsystem.runIntake(0), mIntakeSubsystem));
-        mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runKicker(0), mShooterSubsystem));
+        
      }
 
     public void configureJoysticks(String pickedAuto) {
@@ -136,7 +136,7 @@ public class RobotContainer {
 
         //DRIVER CONTROLS
         mDriverController.y().whileTrue(mShooterSubsystem.toggleShooterCommand()); 
-        mDriverController.x().whileTrue(mShooterSubsystem.runKickerBackwardCommand());
+        
         
 
         
@@ -202,18 +202,12 @@ public class RobotContainer {
   }
 
   
-  public Command autoStopKicker (){
-    return new InstantCommand(() -> mShooterSubsystem.runKicker(0));
-  }
+  
 
     
   
 
-   public Command autoWobbleShoot(){
-   return Commands.parallel(   
-    //new IntakeUpAutoCommand(mArmSubsystem, mIntakeSubsystem).repeatedly(),        
-    mShooterSubsystem.runKickerCommand());
-  }
+   
 }
 
   

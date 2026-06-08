@@ -27,8 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private final SparkMax mShooterLeader;
     private final SparkMax mShooterFollower;
-    private final SparkMax mKickerLeader;
-    private final SparkMax mKickerFollower;
+    
     private final RelativeEncoder mShooterLeaderEncoder;
     private final RelativeEncoder mShooterFollowerEncoder; 
     private final PIDController mShooterPID;
@@ -55,14 +54,11 @@ public class ShooterSubsystem extends SubsystemBase {
     
         mShooterLeader = new SparkMax(ShooterConstants.SHOOTER_LEADER_CANID, MotorType.kBrushless);
         mShooterFollower = new SparkMax(ShooterConstants.SHOOTER_FOLLOWER_CANID, MotorType.kBrushless);
-        mKickerLeader = new SparkMax(ShooterConstants.SHOOTER_FEEDER_LEADER_CANID, MotorType.kBrushless);
-        mKickerFollower = new SparkMax(ShooterConstants.SHOOTER_FEEDER_FOLLOWER_CANID, MotorType.kBrushless);
+        
 
 
         mShooterLeader.configure(ShooterConfig.shooterLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         mShooterFollower.configure(ShooterConfig.shooterFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        mKickerLeader.configure(ShooterConfig.shooterFeederLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        mKickerFollower.configure(ShooterConfig.shooterFeederFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         mShooterLeaderEncoder = mShooterLeader.getEncoder();
         mShooterFollowerEncoder = mShooterFollower.getEncoder();
 
@@ -200,20 +196,14 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Stop shooter motors and kicker.
      */
-    public void stopShooterKicker() {
-        runShooterPower(0);
-        runKicker(0);
-    }
+    
 
     /**
      * Run kicker (feeder) motors. Follower is inverted relative to leader.
      *
      * @param speed motor speed in range [-1.0, 1.0]
      */
-    public void runKicker(double speed) {
-        mKickerLeader.set(speed);
-        mKickerFollower.set(-1 * speed);
-    }
+    
 
     /**
      * Get the average velocity of both shooter encoders (RPM).
@@ -307,27 +297,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     //kicker commands
-    public Command runKickerCommand() {
-         return run(
-        () -> {
-            runKicker(-ShooterConstants.KICKER_SPEED);
-        
-              });
-    }
+    
 
-    public Command runKickerBackwardCommand() {
-         return run(
-        () -> {
-            runKicker(ShooterConstants.KICKER_SPEED);
-              });
-    }
+    
 
-    public Command stop() {
-         return run(
-        () -> {
-            stopShooterKicker();
-              });
-    }
+    
 
 
 

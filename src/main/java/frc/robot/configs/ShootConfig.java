@@ -10,8 +10,7 @@ public final class ShootConfig {
     public static final class ShooterConfig {
         public static final SparkMaxConfig shooterLeaderConfig = new SparkMaxConfig();
         public static final SparkMaxConfig shooterFollowerConfig = new SparkMaxConfig();
-        public static final SparkMaxConfig shooterFeederLeaderConfig = new SparkMaxConfig();
-        public static final SparkMaxConfig shooterFeederFollowerConfig = new SparkMaxConfig();
+        
 
         static {
             // Leader configuration
@@ -25,11 +24,7 @@ public final class ShootConfig {
                 .smartCurrentLimit(50)
                 .idleMode(IdleMode.kCoast);
 
-            // Feeder/Kicker configuration
-            shooterFeederLeaderConfig
-                .smartCurrentLimit(50);
-            shooterFeederFollowerConfig
-                .smartCurrentLimit(50);
+            
         }
     }
 
