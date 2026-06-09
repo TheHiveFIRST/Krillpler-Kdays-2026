@@ -274,11 +274,16 @@ public final class Constants {
     public static final class HopperConstants {
         public static final int TOP_ROLLERS_ID = 0;
         public static final int BELTS_ID = 0;
-        public static final int INDEXER_ID = 0;
+        public static final int KICKER_ID = 0;
         //TODO: correct these once krillpler is wired
 
        
         
+    }
+
+    public static final class TurretConstants {
+      public static final int TURRET_MOTOR_ID = 0;
+      //TODO: correct these once krillpler is wired
     }
 
 }
