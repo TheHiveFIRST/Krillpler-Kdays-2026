@@ -122,11 +122,9 @@ public class RobotContainer {
       
         //OPERATOR CONTROLS
         mOperatorController.y().whileTrue(mShooterSubsystem.toggleShooterCommand());
-        mOperatorController.rightTrigger().onTrue(mShooterSubsystem.setLadderShotCommand());
-        mOperatorController.b().onTrue(mShooterSubsystem.setHubShotCommand());
-        mOperatorController.a().onTrue(mShooterSubsystem.setTrenchShotCommand());
+        
         mOperatorController.leftTrigger().whileTrue(mDriveSubsystem.alignV2Drive(mDriverController, () -> DriveConstants.getHubPose().toPose2d()));
-        mOperatorController.x().onTrue(mShooterSubsystem.toggleDistanceEstimationCommand());
+        
         mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
 

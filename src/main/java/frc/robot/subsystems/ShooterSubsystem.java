@@ -35,17 +35,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     //initialized variables 
-    private double mTargetRPM = ShooterConstants.HUB_TARGET_RPM;
+    private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
-    private boolean mDistanceEstimation = true;
     private boolean mShooterEnabled = false;
-    private String shotType = "HUB_SHOT";
-    private double shooterKinematicsRPM = 0; 
+  
 
     //sysID 
-    private final MutVoltage m_appliedVoltage  = Volts.mutable(0);
-    private final MutAngle m_encoderAngle    = Rotations.mutable(0);
-    private final MutAngularVelocity m_encoderVelocity = RotationsPerSecond.mutable(0);
+ 
     
 
    
@@ -94,62 +90,22 @@ public class ShooterSubsystem extends SubsystemBase {
      * update the internal target RPM. Falls back to a safe RPM if the
      * regression suggests an unrealistically low value.
      *
-     * @param distance distance in meters
+     *  distance in meters
      */
-    public void runShooterRegression(double distance) {
-        double shooterRegressionRPM =
-            (Math.pow(distance, 3) * Constants.ShooterConstants.REGRESSION_COEFFICIENT_3)
-                + (Math.pow(distance, 2) * Constants.ShooterConstants.REGRESSION_COEFFICIENT_2)
-                + (Math.pow(distance, 1) * Constants.ShooterConstants.REGRESSION_COEFFICIENT_1)
-                + (Constants.ShooterConstants.REGRESSION_COEFFICIENT_0);
-        if (shooterRegressionRPM <= 4500) {
-            // Distance is too short; fall back
-            updateRPM(ShooterConstants.HUB_TARGET_RPM);
-            return;
-        }
-        updateRPM(shooterRegressionRPM);
-    }
+    
 
     /**
      * Compute required wheel RPM from kinematic projectile motion equations and
      * update the target RPM. Falls back for invalid geometry.
      *
-     * @param distanceMeters horizontal distance to target in meters
-     */
-    public void runShooterKinematics(double distanceMeters) {
-        double theta = ShooterConstants.LAUNCH_ANGLE_RAD;
-        double deltaH = ShooterConstants.HEIGHT_DIFF_METERS;
-        double r = ShooterConstants.WHEEL_RADIUS_METERS;
-        double eta = ShooterConstants.LAUNCH_EFFICIENCY;
-        double gravityConstant = 9.81;
-
-        double tanTheta = Math.tan(theta);
-        double cosTheta = Math.cos(theta);
-        double denom = 2.0 * cosTheta * cosTheta * (distanceMeters * tanTheta - deltaH);
-
-        if (denom <= 0) {
-            // Distance is too short for this angle/height combo
-            updateRPM(ShooterConstants.HUB_TARGET_RPM);
-            return;
-        }
-
-        double v0 = Math.sqrt((gravityConstant * distanceMeters * distanceMeters) / denom);
-
-        // Surface speed of wheel = v0 / eta, convert to RPM
-        shooterKinematicsRPM = (v0 / (eta * r)) * (60.0 / (2.0 * Math.PI));
-
-        updateRPM(shooterKinematicsRPM);
-    }
+     * 
 
     /**
      * Return the most recently computed kinematics RPM.
      *
      * @return last computed kinematics RPM
      */
-    public double getShooterKinematicsRPM() {
-        return shooterKinematicsRPM;
-    }
-
+    
     /**
      * Directly set shooter motor power (open-loop).
      *
@@ -231,12 +187,7 @@ public class ShooterSubsystem extends SubsystemBase {
    
 
     //Commands 
-    public Command runShooterAutoCommand() {       
-        return run(
-        () -> {
-            setShooterSpeeds(ShooterConstants.AUTO_TARGET_RPM, 0);
-              }); 
-        }
+    
     
     public Command runShooterPIDFCommand() {
          return run(
@@ -244,18 +195,8 @@ public class ShooterSubsystem extends SubsystemBase {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
               });
     }
-     public Command runShooterRegressionCommand() {
-         return run(
-        () -> {
-            runShooterRegression(DriveSubsystem.hubDistance);
-              });
-    }
-    public Command runShooterKinematicsCommand() {
-         return run(
-        () -> {
-            runShooterKinematics(DriveSubsystem.hubDistance);
-              });
-    }
+    
+    
     public Command runShooterPowerCommand() {
          return run(
         () -> {
@@ -276,8 +217,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command toggleShooterCommand() {
         return new InstantCommand(() -> mShooterEnabled = !mShooterEnabled);}
 
-    public Command toggleDistanceEstimationCommand() {
-        return new InstantCommand(() -> mDistanceEstimation = !mDistanceEstimation);}
     
     public Command toggleAutoShooterCommand() {
        return new InstantCommand(() -> mShooterEnabled = true);}
@@ -293,56 +232,7 @@ public class ShooterSubsystem extends SubsystemBase {
       return new InstantCommand(() -> changeShootingRPMOffset(-ShooterConstants.RPMOFFSET_INCREMENT));
     }
 
-    public Command setHubShotCommand() {
-    return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.HUB_TARGET_RPM;
-        ShooterRPMOffset = 0;
-        mDistanceEstimation = false; 
-        shotType = "BUMPER_ALIGN_SHOT";
-        });
-    }
-public Command setAutoShotCommand() {
-    return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.AUTORPM;
-        ShooterRPMOffset = 0;
-        shotType = "AUTOSHOT";
-        });
-    }
-
-    public Command setTrenchShotCommand() {
-          return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.TRENCH_TARGET_RPM;
-        ShooterRPMOffset = 0;
-        mDistanceEstimation = false; 
-        shotType = "TRENCH_SHOT";
-
-        });}
     
-    public Command setDefenceShotCommand() {
-          return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.DEFENCE_TARGET_RPM;
-        ShooterRPMOffset = 0;
-        mDistanceEstimation = false; 
-        shotType = "DEFENCE_SHOT";
-
-        });}
-
-    public Command setLadderShotCommand() {
-          return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.LADDER_TARGET_RPM;
-        ShooterRPMOffset = 0;
-        mDistanceEstimation = false; 
-        shotType = "TOWER_SHOT";
-
-        });}
-    
-    public Command setPassingShotCommand() {
-          return new InstantCommand(() -> {
-        mTargetRPM = ShooterConstants.PASSING_TARGET_RPM;
-        ShooterRPMOffset = 0;
-        mDistanceEstimation = false; 
-        shotType = "PASSING_SHOT";
-        });}
 
 
 
@@ -351,11 +241,9 @@ public Command setAutoShotCommand() {
 
     @Override
     public void periodic() {
-        if (mDistanceEstimation) {
-            runShooterRegression(DriveSubsystem.hubDistance);
-        } else {
-            updateRPM(mTargetRPM);
-        }
+        
+        updateRPM(mTargetRPM);
+        
 
         if (mShooterEnabled) {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
@@ -366,13 +254,12 @@ public Command setAutoShotCommand() {
         SmartDashboard.putNumber("Shooter/Target RPM", mTargetRPM + ShooterRPMOffset);
         SmartDashboard.putNumber("Shooter/Actual RPM", mShooterLeaderEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter/RPM Offset", ShooterRPMOffset);
-        SmartDashboard.putString("Shooter/Shot Type", shotType);
+        
     boolean atSpeed = Math.abs(mShooterLeaderEncoder.getVelocity() - (mTargetRPM + ShooterRPMOffset))
         < ShooterConstants.VELOCITY_TOLERANCE;
         SmartDashboard.putBoolean("Shooter/Shooter Ready", atSpeed);
         SmartDashboard.putBoolean("Shooter/Shooter Toggled", mShooterEnabled);
-        SmartDashboard.putBoolean("Shooter/Regression Toggled", mDistanceEstimation);
-        SmartDashboard.putNumber("Shooter/Kinematics RPM", getShooterKinematicsRPM());
+        
     }
 
 
