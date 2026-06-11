@@ -28,14 +28,6 @@ public final class ShootConfig {
         }
     }
 
-    public static final class IntakeConfigs {
-        // TODO: add code here for cims/pneumatics
-        
-
-        static {
-            
-            
-        }
-    }
+    
     
 }
