@@ -191,12 +191,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     
     
-    public Command runShooterPowerCommand() {
-         return run(
-        () -> {
-            runShooterPower(ShooterConstants.SHOOTER_SPEED);
-              });
-    }
+    
 
     //kicker commands
     

@@ -77,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public static double hubDistance = 0; 
 
-  public double autoAlignRotationalRate = 10; 
+  
   public double targetx = 0;
   public double targety = 0;
   public double targetangle = 0;
@@ -197,7 +197,7 @@ SmartDashboard.putNumber("Driving/x", targetx);
     SmartDashboard.putNumber("Driving/y", targety);
     SmartDashboard.putNumber("Driving/angle", targetangle*180/Math.PI);
 
-    SmartDashboard.putNumber("Driving/AUTOALIGNROTATIONRATE", autoAlignRotationalRate);
+    
   }
 
   /**
@@ -445,31 +445,7 @@ SmartDashboard.putNumber("Driving/x", targetx);
         return centerToTargetMeters;
   }
 
-  public Command alignV2Drive(CommandXboxController controller, Supplier<Pose2d> targetPoseSupplier) {
-
-    return run(() -> {
-
-        double controllerVelX =-MathUtil.applyDeadband( controller.getLeftY(), OperatorConstants.DRIVE_DEADBAND);
-        double controllerVelY = -MathUtil.applyDeadband(controller.getLeftX(),OperatorConstants.DRIVE_DEADBAND);
-        Pose2d drivePose = getVisionPose();
-        Pose2d targetPose = targetPoseSupplier.get();
-        targetx = -(drivePose.getX() - targetPose.getX());
-        targety = -(drivePose.getY() - targetPose.getY());
-        if (targety > 0) {
-        targetangle = Math.atan2(targety, targetx) - Math.PI;
-        } else if (targety < 0) {
-        targetangle = Math.PI + Math.atan2(targety, targetx);
-        }else if (targety == 0) {
-        targetangle = 0;
-        }
-        Translation2d robotToTarget = targetPose.getTranslation().minus(drivePose.getTranslation());
-        desiredAngle = robotToTarget.getAngle();
-        double current = MathUtil.inputModulus(mGyro.getAngle()/180*Math.PI, -Math.PI, Math.PI);
-        autoAlignRotationalRate = (targetangle + current) * 2;
-        driveJoystick(controllerVelX, controllerVelY, autoAlignRotationalRate, true);
-   
-      });
-  }
+  
   
   public void incrementKP(){ DriveConstants.ROTATION_KP += DriveConstants.KP_INCREMENT;};
 

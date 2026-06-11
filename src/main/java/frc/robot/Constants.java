@@ -224,12 +224,7 @@ public final class Constants {
         public static final double LEADER_FF_kV = 0.00012;
         public static final double LEADER_FF_kA = 0.0002;
 
-        public static final double TESTING_KP = 0.0006;
-        public static final double TESTING_KI = 0;
-        public static final double TESTING_KD = 0;
-        public static final double FF_KS = 0.0;
-        public static final double FF_KV = 0.0;
-        public static final double FF_KA = 0.0;
+        
     
         // Manual Control 
         public static final double RPM_INCREMENT = 12.5;
@@ -238,37 +233,22 @@ public final class Constants {
         public static final double KI_INCREMENT = 0.0001;
         public static final double KD_INCREMENT = 0.0001;
 
-        public static final double KICKER_SPEED = 1.0
+        
         ;
-        public static final double KICKERREVERSED_SPEED = -1.0;
-        public static final double SHOOTER_SPEED = 0.7; 
+        
 
         public static final double VELOCITY_TOLERANCE =  30; 
-        public static final double AUTORPM = 5700;
+        
 
-        public static final double HUB_TARGET_RPM = 4500; //TUNED //not 4440
-        public static final double TRENCH_TARGET_RPM = 6800; 
-        public static final double LADDER_TARGET_RPM = 6300;
-
-        public static final double PASSING_TARGET_RPM = 8000;
-        public static final double DEFENCE_TARGET_RPM = 5200; 
-
-        public static final double AUTO_TARGET_RPM = 5400; 
+        
 
         public static final double RPMOFFSET_INCREMENT = 200; 
 
         //Regression coefficients 
-        public static final double REGRESSION_COEFFICIENT_4 = 0; 
-        public static final double REGRESSION_COEFFICIENT_3 = 0;
-        public static final double REGRESSION_COEFFICIENT_2 = -0;
-        public static final double REGRESSION_COEFFICIENT_1 = 670;
-        public static final double REGRESSION_COEFFICIENT_0 = 3520;
+        
 
         //untested kinematics equation
-        public static final double LAUNCH_ANGLE_RAD = Math.toRadians(25.0);  
-        public static final double HEIGHT_DIFF_METERS = 1.296867993;                 // shooter height to target height, tune this
-        public static final double WHEEL_RADIUS_METERS = 0.0508;             //tune this
-        public static final double LAUNCH_EFFICIENCY = 0.85;                 // 0.80–0.95, tune this
+                   // 0.80–0.95, tune this
 
     }
     //intake.retract(7s);;; [
