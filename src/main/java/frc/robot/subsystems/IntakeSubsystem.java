@@ -22,8 +22,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final DoubleSolenoid mPneumaticsFollower;
     
     public IntakeSubsystem() {
-      mIntakeMotorLeader = new WPI_TalonSRX(IntakeConstants.INTAKE_MOTOR_ID);
-      mIntakeMotorFollower = new WPI_TalonSRX(IntakeConstants.INTAKE_MOTOR_ID);
+      mIntakeMotorLeader = new WPI_TalonSRX(IntakeConstants.INTAKE_LEADER_ID);
+      mIntakeMotorFollower = new WPI_TalonSRX(IntakeConstants.INTAKE_FOLLOWER_ID);
 
       TalonSRXConfiguration config = new TalonSRXConfiguration();
       config.peakCurrentLimit = 40; //amps
@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
       mIntakeMotorFollower.enableCurrentLimit(true);
       mIntakeMotorFollower.setInverted(true);
 
-      mPneumaticsLeader = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.LEADER_FORWARD_CHANNEL, IntakeConstants.FOLLOWER_REVERSE_CHANNEL);
+      mPneumaticsLeader = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.LEADER_FORWARD_CHANNEL, IntakeConstants.LEADER_REVERSE_CHANNEL);
       mPneumaticsFollower = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.FOLLOWER_FORWARD_CHANNEL, IntakeConstants.FOLLOWER_REVERSE_CHANNEL);
 
     }

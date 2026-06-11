@@ -200,7 +200,8 @@ public final class Constants {
   } 
   
   public static final class IntakeConstants {
-        public static final int INTAKE_MOTOR_ID = 0; //TODO: correct this once krillpler is built
+        public static final int INTAKE_LEADER_ID = 0; //TODO: correct this once krillpler is built
+        public static final int INTAKE_FOLLOWER_ID = 0;
         public static final float INTAKING_POWER = 1; 
         public static final int LEADER_FORWARD_CHANNEL = 0;
         public static final int FOLLOWER_FORWARD_CHANNEL = 0;
