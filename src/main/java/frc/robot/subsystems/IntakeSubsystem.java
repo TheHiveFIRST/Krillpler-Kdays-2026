@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -12,9 +16,26 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   // declare motors/controllers here
+    private final WPI_TalonSRX mIntakeMotorLeader;
+    private final WPI_TalonSRX mIntakeMotorFollower;
+    private final DoubleSolenoid mPneumaticsLeader;
+    private final DoubleSolenoid mPneumaticsFollower;
+    
+    public IntakeSubsystem() {
+      mIntakeMotorLeader = new WPI_TalonSRX(IntakeConstants.INTAKE_MOTOR_ID);
+      mIntakeMotorFollower = new WPI_TalonSRX(IntakeConstants.INTAKE_MOTOR_ID);
 
-    
-    
+      TalonSRXConfiguration config = new TalonSRXConfiguration();
+      config.peakCurrentLimit = 40; //amps
+      mIntakeMotorLeader.configAllSettings(config);
+      mIntakeMotorFollower.configAllSettings(config);
+      mIntakeMotorFollower.setInverted(true);
+
+      mPneumaticsLeader = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.LEADER_FORWARD_CHANNEL, IntakeConstants.FOLLOWER_REVERSE_CHANNEL);
+      mPneumaticsFollower = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.FOLLOWER_FORWARD_CHANNEL, IntakeConstants.FOLLOWER_REVERSE_CHANNEL);
+
+    }
+
 
 
     
