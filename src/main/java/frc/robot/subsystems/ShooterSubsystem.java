@@ -103,7 +103,7 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Return the most recently computed kinematics RPM.
      *
-     * @return last computed kinematics RPM
+     *  last computed kinematics RPM
      */
     
     /**
@@ -116,11 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
         mShooterFollower.set(motorPower);
     }
 
-    /**
-     * Stop shooter motors and kicker.
-     */
     
-
     /**
      * Run kicker (feeder) motors. Follower is inverted relative to leader.
      *
@@ -168,11 +164,9 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Update the internal target RPM.
      *
-     * @param newRPM new target RPM
+     *  new target RPM
      */
-    public void updateRPM(double newRPM) {
-        mTargetRPM = newRPM;
-    }
+    
 
     /** Increase target RPM by configured increment */
     public void incrementRPM() {
@@ -242,7 +236,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         
-        updateRPM(mTargetRPM);
+        
         
 
         if (mShooterEnabled) {
