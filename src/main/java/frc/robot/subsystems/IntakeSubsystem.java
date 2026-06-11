@@ -27,8 +27,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
       TalonSRXConfiguration config = new TalonSRXConfiguration();
       config.peakCurrentLimit = 40; //amps
+      config.peakCurrentDuration = 200;
+      config.continuousCurrentLimit = 30;
       mIntakeMotorLeader.configAllSettings(config);
       mIntakeMotorFollower.configAllSettings(config);
+      mIntakeMotorLeader.enableCurrentLimit(true);
+      mIntakeMotorFollower.enableCurrentLimit(true);
       mIntakeMotorFollower.setInverted(true);
 
       mPneumaticsLeader = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.LEADER_FORWARD_CHANNEL, IntakeConstants.FOLLOWER_REVERSE_CHANNEL);
