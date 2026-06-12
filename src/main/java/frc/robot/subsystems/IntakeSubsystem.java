@@ -74,10 +74,31 @@ public class IntakeSubsystem extends SubsystemBase {
     
     
 
-    public Command runIntake() {
+    public Command runIntakeCommand() {
          return run(
         () -> {
             setIntakePower(1.0);
+              });
+    }
+
+    public Command stopIntakeCommand() {
+         return run(
+        () -> {
+            stopIntake();
+              });
+    }
+
+    public Command deployIntakeCommand() {
+         return run(
+        () -> {
+            deployIntake();
+              });
+    }
+
+    public Command retractIntakeCommand() {
+         return run(
+        () -> {
+            retractIntake();
               });
     }
 
