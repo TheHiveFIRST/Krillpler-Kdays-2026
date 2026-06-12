@@ -4,6 +4,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -30,9 +32,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class RobotContainer {
   private final VisionSubsystem mVisionSubsystem = new VisionSubsystem(); 
   private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
- 
+  private final HopperSubsystem mhoppersubsystem = new HopperSubsystem();
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(); 
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
+  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final SendableChooser<Command> autoChooser;
 
   private final CommandXboxController mDriverController = 
@@ -70,7 +73,7 @@ public class RobotContainer {
             mDriveSubsystem));
 
        
-        mShooterSubsystem.setDefaultCommand(new RunCommand(()-> mShooterSubsystem.runShooterPower(0), mShooterSubsystem));
+        // set default commands here
         
         
      }
