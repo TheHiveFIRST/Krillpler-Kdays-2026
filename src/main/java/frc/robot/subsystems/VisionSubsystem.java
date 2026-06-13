@@ -12,10 +12,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 
+import org.photonvision.PhotonCamera;
+
 import frc.robot.subsystems.DriveSubsystem;
 
 public class VisionSubsystem extends SubsystemBase {
-
-     
+    public final PhotonCamera photonCamera1;
+    
+    public VisionSubsystem() {
+        photonCamera1 = new PhotonCamera("camera1");
+    }
 }
     
