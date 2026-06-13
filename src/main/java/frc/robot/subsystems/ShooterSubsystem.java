@@ -9,9 +9,12 @@ import com.revrobotics.ResetMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private final SparkMax mShooterLeader;
     private final SparkMax mShooterFollower;
-    
+    Servo hood = new Servo(1);
     private final RelativeEncoder mShooterLeaderEncoder;
     private final RelativeEncoder mShooterFollowerEncoder; 
     private final PIDController mShooterPID;
@@ -83,6 +86,11 @@ public class ShooterSubsystem extends SubsystemBase {
         double ffOutput = tempFF.calculate(setRPM + RPMOffset);
         double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
         runShooterPower(motorPower);
+    }
+
+    public void hoodAim(Rotation2d angle){
+        hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
+        * ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
     }
 
     /**
