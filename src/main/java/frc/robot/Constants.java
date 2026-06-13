@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 //import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import static edu.wpi.first.units.Units.Degrees;
@@ -261,6 +262,43 @@ public final class Constants {
 
     }
 
+
+
+
+  public static class TurretConstants {
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kF = 0;
+
+    public static final double B1_X = 0; // Need to tune these.
+    public static final double B1_Y = 0;
+
+    public static final double B2_X = 0;
+    public static final double B2_Y = 0;
+
+    public static final double B3_X = 0;
+    public static final double B3_Y = 0;
+
+    public static final double R1_X = 0;
+    public static final double R1_Y = 0;
+
+    public static final double R2_X = 0;
+    public static final double R2_Y = 0;
+
+    public static final double R3_X = 0;
+    public static final double R3_Y = 0;
+
+    public static final double MAX_DEG = 0;
+    public static final double MIN_DEG = 0;
+
+    public static final double TICKS_PER_DEGREE = 0;
+
+    public static final int TURRET_CAN_ID = 0;
+
+
+  }
+
     public static final class ArmConstants {
         public static final int ARM_LEADER_ID = 12;
         public static final int ARM_FOLLOWER_ID = 13;
@@ -277,6 +315,16 @@ public final class Constants {
         public static final double ARM_KP_INCREMENT = 0.01;
 
         public static final double POSITION_TOLERANCE = 0.1;
+    }
+
+    public static final class HopperConstants {
+      public static final double HOPPER_SPEED = 0.5;
+      public static final double SLOW_HOPPER_SPEED = 0.2;
+      public static final double OUTTAKE_HOPPER_SPEED = -0.5;
+
+      public static final int TOP_ROLLERS_ID = 17;
+      public static final int BELTS_ID = 18;
+      public static final int KICKER_ID = 19;
     }
 
 }

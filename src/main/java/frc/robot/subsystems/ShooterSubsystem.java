@@ -74,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
         runShooterPower(motorPower); 
     }
 
-    public double getShooterPIDF(double setRPM, double RPMOffset) {
+    public double getShooterPIDF(double setRPM, double RPMOffset) { // Not used
         double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
         double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
         double ffOutput = tempFF.calculate(setRPM + RPMOffset); 
