@@ -77,7 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command runIntakeCommand() {
          return run(
         () -> {
-            setIntakePower(1.0);
+            setIntakePower(IntakeConstants.INTAKING_POWER);
               });
     }
 

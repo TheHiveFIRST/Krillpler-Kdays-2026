@@ -78,49 +78,7 @@ public class RobotContainer {
         
      }
 
-    public void configureJoysticks(String pickedAuto) {
-      switch (pickedAuto) {
-        case "DOUBLE_SWIPE_HUMAN_PLAYER":
-        case "SINGLE_SWIPE_HUMAN_PLAYER":
-          DriveSubsystem.gyrooffset = -90;
-          mDriveSubsystem.setDefaultCommand(
-          new RunCommand(() -> {
-              double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
-              mDriveSubsystem.driveJoystick(
-                  MathUtil.applyDeadband(-mDriverController.getLeftX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(mDriverController.getLeftY()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  true);},
-              mDriveSubsystem));
-          
-          break;
-        case "DOUBLE_SWIPE_DEPOT":
-        case "SINGLE_SWIPE_DEPOT":
-          DriveSubsystem.gyrooffset = 90;
-          mDriveSubsystem.setDefaultCommand(
-          new RunCommand(() -> {
-              double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
-              mDriveSubsystem.driveJoystick(
-                  MathUtil.applyDeadband(-mDriverController.getLeftX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(-mDriverController.getLeftY()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  true);},
-              mDriveSubsystem));
-          break;
-        default: // start in front of the hub
-          DriveSubsystem.gyrooffset = 0;
-          mDriveSubsystem.setDefaultCommand(  
-            new RunCommand(() -> {
-              double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
-              mDriveSubsystem.driveJoystick(
-                  MathUtil.applyDeadband(-mDriverController.getLeftY()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(-mDriverController.getLeftX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                  true);},
-              mDriveSubsystem));
-          break;
-      }
-    }
+    
     private void configureBindings() {
       
         //OPERATOR CONTROLS
@@ -130,8 +88,7 @@ public class RobotContainer {
         mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
 
-        mOperatorController.povDown().whileTrue(mDriveSubsystem.characterizeAngular(3));
-        mOperatorController.povUp().whileTrue(mDriveSubsystem.characterizeLinear(4));
+        
 
 
         //DRIVER CONTROLS

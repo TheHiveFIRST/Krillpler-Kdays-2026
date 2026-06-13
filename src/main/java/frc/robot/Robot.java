@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.configureJoysticks(m_autoName);
+    
     m_robotContainer.zeroGyroHeading();
     //m_robotContainer.resetVisionPose();
   }
