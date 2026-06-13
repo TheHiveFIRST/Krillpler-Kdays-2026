@@ -85,12 +85,6 @@ public class ShooterSubsystem extends SubsystemBase {
         return average;
     }
 
-    /**
-     * Main PID+feedforward controller that computes and applies motor output.
-     *
-     * @param setRPM desired shooter speed (RPM)
-     * @param RPMOffset offset to add to the desired RPM
-     */
     public void setShooterSpeeds(double setRPM, double RPMOffset) {
         double mCurrentRPM = getAverageVelocity();
         double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
@@ -121,115 +115,22 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-    /**
-     * Compute a target RPM from a polynomial regression based on distance and
-     * update the internal target RPM. Falls back to a safe RPM if the
-     * regression suggests an unrealistically low value.
-     *
-     *  distance in meters
-     */
-    
-
-    /**
-     * Compute required wheel RPM from kinematic projectile motion equations and
-     * update the target RPM. Falls back for invalid geometry.
-     *
-     * 
-
-    /**
-     * Return the most recently computed kinematics RPM.
-     *
-     *  last computed kinematics RPM
-     */
-    
-    /**
-     * Directly set shooter motor power (open-loop).
-     *
-     * @param motorPower motor power in range [-1.0, 1.0]
-     */
-    
-
-    
-    /**
-     * Run kicker (feeder) motors. Follower is inverted relative to leader.
-     *
-     * @param speed motor speed in range [-1.0, 1.0]
-     */
-    
-
-    /**
-     * Get the average velocity of both shooter encoders (RPM).
-     *
-     * @return average RPM
-     */
-    
-
-    /**
-     * Return the motor output computed by the PID+feedforward controller without
-     * applying it.
-     *
-     * @param setRPM desired RPM
-     * @param RPMOffset offset to add to desired RPM
-     * @return clipped motor output in [0,1]
-     */
-    
-
-    // Offsets and updates
-    /**
-     * Change the shooter RPM tuning offset.
-     *
-     * @param amount amount to change the offset by
-     */
     private void changeShootingRPMOffset(double amount) {
         ShooterRPMOffset += amount;
     }
 
-    /**
-     * Update the internal target RPM.
-     *
-     *  new target RPM
-     */
-    
-
-    /** Increase target RPM by configured increment */
-    
-
-   
-
     //Commands 
-    
-    
-    public Command runShooterPIDFCommand() {
+     public Command runShooterPIDFCommand() {
          return run(
         () -> {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
               });
     }
     
-    
-    
-
-    //kicker commands
-    
-
-    
-
-    
-
-
-
     //toggles
     public Command toggleShooterCommand() {
         return new InstantCommand(() -> mShooterEnabled = !mShooterEnabled);}
-
-    
-    public Command toggleAutoShooterCommand() {
-       return new InstantCommand(() -> mShooterEnabled = true);}
-    
-    public Command toggleOffAutoShooterCommand() {
-       return new InstantCommand(() -> mShooterEnabled = false);}
-    
-    
+ 
     public Command increaseShootingRPMOffsetCommand(){
     return new InstantCommand(() -> changeShootingRPMOffset(ShooterConstants.RPMOFFSET_INCREMENT));
     }
@@ -242,7 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     //sysID tests 
-    
+    //TODO: add sysid tests
 
     @Override
     public void periodic() {
