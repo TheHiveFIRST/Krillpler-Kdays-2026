@@ -232,6 +232,8 @@ public final class Constants {
         public static final double KP_INCREMENT = 0.001;
         public static final double KI_INCREMENT = 0.0001;
         public static final double KD_INCREMENT = 0.0001;
+        public static final double HUB_RPM = 4000;
+        public static final Rotation2d HUB_RPM_ANGLE = Rotation2d.fromDegrees(20);
 
         
         ;

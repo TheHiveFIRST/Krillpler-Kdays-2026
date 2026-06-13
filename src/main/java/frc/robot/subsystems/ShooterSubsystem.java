@@ -30,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private final SparkMax mShooterLeader;
     private final SparkMax mShooterFollower;
-    Servo hood = new Servo(1);
+    private final Servo hood = new Servo(1);
     private final RelativeEncoder mShooterLeaderEncoder;
     private final RelativeEncoder mShooterFollowerEncoder; 
     private final PIDController mShooterPID;
@@ -41,6 +41,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
+    public boolean turretTweaking = true;
+    //TODO: when turret is functional, set this to false upon initialization
   
 
     //sysID 
@@ -73,6 +75,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // Methods
+    public void runShooterPower(double motorPower) {
+        mShooterLeader.set(motorPower);
+        mShooterFollower.set(motorPower);
+    }
+    public double getAverageVelocity() {
+        double sum = mShooterLeaderEncoder.getVelocity() + mShooterFollowerEncoder.getVelocity();
+        double average = sum / 2;
+        return average;
+    }
 
     /**
      * Main PID+feedforward controller that computes and applies motor output.
@@ -81,16 +92,33 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param RPMOffset offset to add to the desired RPM
      */
     public void setShooterSpeeds(double setRPM, double RPMOffset) {
-        double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
+        double mCurrentRPM = getAverageVelocity();
         double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
         double ffOutput = tempFF.calculate(setRPM + RPMOffset);
         double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
         runShooterPower(motorPower);
     }
+    public double getShooterPIDF(double setRPM, double RPMOffset) {
+        double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
+        double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
+        double ffOutput = tempFF.calculate(setRPM + RPMOffset);
+        double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
+        return motorPower;
+    }
 
     public void hoodAim(Rotation2d angle){
         hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
         * ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
+    }
+
+    public void updateRPMs(){
+        if (turretTweaking) {
+            mTargetRPM = ShooterConstants.HUB_RPM;
+            hoodAim(ShooterConstants.HUB_RPM_ANGLE);
+
+        } else {
+            //TODO: when calculations file is completed, pass in those values here
+        }
     }
 
     /**
@@ -119,10 +147,7 @@ public class ShooterSubsystem extends SubsystemBase {
      *
      * @param motorPower motor power in range [-1.0, 1.0]
      */
-    public void runShooterPower(double motorPower) {
-        mShooterLeader.set(motorPower);
-        mShooterFollower.set(motorPower);
-    }
+    
 
     
     /**
@@ -137,11 +162,7 @@ public class ShooterSubsystem extends SubsystemBase {
      *
      * @return average RPM
      */
-    public double getAverageVelocity() {
-        double sum = mShooterLeaderEncoder.getVelocity() + mShooterFollowerEncoder.getVelocity();
-        double average = sum / 2;
-        return average;
-    }
+    
 
     /**
      * Return the motor output computed by the PID+feedforward controller without
@@ -151,13 +172,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param RPMOffset offset to add to desired RPM
      * @return clipped motor output in [0,1]
      */
-    public double getShooterPIDF(double setRPM, double RPMOffset) {
-        double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
-        double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
-        double ffOutput = tempFF.calculate(setRPM + RPMOffset);
-        double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
-        return motorPower;
-    }
+    
 
     // Offsets and updates
     /**
@@ -177,14 +192,7 @@ public class ShooterSubsystem extends SubsystemBase {
     
 
     /** Increase target RPM by configured increment */
-    public void incrementRPM() {
-        mTargetRPM += ShooterConstants.RPM_INCREMENT;
-    }
-
-    /** Decrease target RPM by configured increment */
-    public void decrementRPM() {
-        mTargetRPM -= ShooterConstants.RPM_INCREMENT;
-    }
+    
 
    
 
@@ -238,7 +246,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+      updateRPMs();  
         
         
 
