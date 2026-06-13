@@ -37,9 +37,9 @@ public final class Constants {
     public static final double MAX_ANGULAR_SPEED =  2 * Math.PI; // rad/s 
     //Chassis config - width, depth, CAN IDS and angular offset values in Designdoc.md
   
-    public static final double WHEEL_CENTER_WIDTH = Units.inchesToMeters(11.25);
+    public static final double WHEEL_CENTER_WIDTH = Units.inchesToMeters(12.25);
     // Distance between centers of right and left wheels on robot
-    public static final double WHEEL_CENTER_DEPTH = Units.inchesToMeters(11.25);
+    public static final double WHEEL_CENTER_DEPTH = Units.inchesToMeters(10.25);
     // Distance between front and back wheels on robot
     //depth/frontback distance from robot center to each wheel 
 
