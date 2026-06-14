@@ -35,6 +35,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.configs.TurretConfig;
+import frc.robot.global.control.KalmanFilter;
+import frc.robot.global.util.math.Ballistics;
 
 /**
  * Turret subsystem -- "krilldih'.
@@ -62,11 +64,11 @@ public class TurretSubsystem extends SubsystemBase {
         NoPosition
     }
 
+    // Filter
+    private KalmanFilter filter;
+
     // Goon
     //  HARDWARE
-    //  Declared and constructed here. They are CONFIGURED in the constructor.
-    //  CAN IDs come from Constants -- coordinate them with the drivetrain so no
-    //  two devices collide.
 
     private final TalonFX turretMotor =
             new TalonFX(TurretConstants.TURRET_CAN_ID); // Replace later
@@ -176,6 +178,8 @@ public class TurretSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        filter = new KalmanFilter(0.2, 0.01);
+
         // --- STEP 1: read the robot's current state -------------------------
         // TODO: get the robot Pose2d from poseSupplier, and the field-relative
         //       ChassisSpeeds from fieldRelativeSpeedsSupplier.
@@ -221,19 +225,13 @@ public class TurretSubsystem extends SubsystemBase {
         publishTelemetry();
     }
 
-    // ========================================================================
-    //  HELPER METHODS
-    // ========================================================================
+    // Help ME METHODS
 
-    /**
-     * TODO: Estimate projectile flight time for the moving-shot lead.
-     *  - For a first pass, a crude linear model is fine: distance * someConstant.
-     *  - LATER: replace with your Ballistics class. First check whether its
-     *    methods are static -- that decides if you need a Ballistics object.
-     */
-    private double estimateTimeOfFlight(double distanceMeters) {
-        // TODO
-        return 0.0; // placeholder so the skeleton compiles
+    public static double calculateTimeOfFlight(double distanceToTarget, double velocity, double launchAngleDeg) {
+        double theta = Math.toRadians(launchAngleDeg);
+        double vx = velocity * Math.cos(theta);
+        if (Math.abs(vx) < 0.001) return 0.001; // Avoid divide by zero...
+        return distanceToTarget / vx;
     }
 
     /**
