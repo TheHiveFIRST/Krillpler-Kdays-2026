@@ -130,6 +130,8 @@ public class ShooterSubsystem extends SubsystemBase {
     //toggles
     public Command toggleShooterCommand() {
         return new InstantCommand(() -> mShooterEnabled = !mShooterEnabled);}
+    public Command toggleShooterCaulculationsCommand() {
+        return new InstantCommand(() -> turretTweaking = !turretTweaking);}    
  
     public Command increaseShootingRPMOffsetCommand(){
     return new InstantCommand(() -> changeShootingRPMOffset(ShooterConstants.RPMOFFSET_INCREMENT));
