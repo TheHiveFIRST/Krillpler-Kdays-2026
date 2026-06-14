@@ -327,7 +327,6 @@ public final class Constants {
       public static final int BOTTOM_BELTS_ID = 20;
       public static final int INDEXER_ID = 19;
     }
-
 }
 
    

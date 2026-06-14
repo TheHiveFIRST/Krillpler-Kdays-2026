@@ -67,6 +67,11 @@ public class TurretSubsystem extends SubsystemBase {
     // Filter
     private KalmanFilter filter;
 
+    // Shoot stuff in air
+    private Ballistics Ballistics;
+
+    // 
+
     // Goon
     //  HARDWARE
 
@@ -226,13 +231,6 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     // Help ME METHODS
-
-    public static double calculateTimeOfFlight(double distanceToTarget, double velocity, double launchAngleDeg) {
-        double theta = Math.toRadians(launchAngleDeg);
-        double vx = velocity * Math.cos(theta);
-        if (Math.abs(vx) < 0.001) return 0.001; // Avoid divide by zero...
-        return distanceToTarget / vx;
-    }
 
     /**
      * TODO: Convert a turret angle in DEGREES to MOTOR rotations.
