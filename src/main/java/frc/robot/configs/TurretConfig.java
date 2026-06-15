@@ -6,12 +6,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants.TurretConstants;
 public class TurretConfig {
-    public static final class TurretConfigs {
+    
         public static final TalonFXConfiguration trackHub = new TalonFXConfiguration();
 
         static {
 
-            trackHub:
+            
                 trackHub.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
                 trackHub.MotorOutput.NeutralMode = NeutralModeValue.Brake;
                 trackHub.CurrentLimits.SupplyCurrentLimit = 30;
@@ -25,5 +25,5 @@ public class TurretConfig {
                 trackHub.MotionMagic.MotionMagicAcceleration = 0;
                 trackHub.MotionMagic.MotionMagicCruiseVelocity = 0;
         }
-    }
+    
 }
