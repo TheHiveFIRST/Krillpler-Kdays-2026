@@ -40,7 +40,7 @@ public class HopperSubsystem extends SubsystemBase{
         mIndexer.set(speed);
     }
 
-    public void stopIntake() {
+    public void stopShooting() {
         runTopRoller(0);
         runShoot(0);
     }
@@ -62,7 +62,7 @@ public class HopperSubsystem extends SubsystemBase{
     public Command stopIntakeCommand() {
         return run(
             () -> {
-                stopIntake();
+                stopShooting();
             });
     }
 
