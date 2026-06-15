@@ -268,6 +268,7 @@ public final class Constants {
 
     public static final class TurretConstants {
       public static final int TURRET_MOTOR_ID = 0;
+      public static final float TURRET_KP = 0;
       //TODO: correct these once krillpler is wired
     }
 
