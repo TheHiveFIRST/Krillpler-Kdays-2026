@@ -45,7 +45,7 @@ public class HopperSubsystem extends SubsystemBase{
         runShoot(0);
     }
 
-    public Command runIntakeCommand() { // Moodshal said this can have problemss. 
+    public Command runTopRollerCommand() { // Moodshal said this can have problemss. 
         return run(
         () -> {
             runTopRoller(HopperConstants.HOPPER_SPEED);
@@ -59,7 +59,7 @@ public class HopperSubsystem extends SubsystemBase{
             });
     }
 
-    public Command stopIntakeCommand() {
+    public Command stopShootingCommand() {
         return run(
             () -> {
                 stopShooting();
