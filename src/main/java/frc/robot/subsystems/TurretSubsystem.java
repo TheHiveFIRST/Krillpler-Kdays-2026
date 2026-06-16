@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.configs.TurretConfig;
@@ -43,7 +44,7 @@ public class TurretSubsystem extends SubsystemBase{
         TurretMotorTarget = getMotorTarget(TurretTarget);
 
     }
-    
+
     public boolean isTurretAtTarget() {
         return (Math.abs(mTurretMotor.getPosition().getValueAsDouble() - TurretMotorTarget) < 0.05);
     }
@@ -64,7 +65,44 @@ public class TurretSubsystem extends SubsystemBase{
     public void periodic() {
         turretAtTarget = isTurretAtTarget();
     }
-    
+    //commands
+    public Command stopTurretCommand() {
+         return run(
+        () -> {
+            stopTurret();
+              });
+    }
+
+    public Command runTurretClockwiseCommand() {
+         return run(
+        () -> {
+            runTurretClockwise();
+              });
+    }
+
+    public Command runTurretCounterClockwiseCommand() {
+         return run(
+        () -> {
+            runTurretCounterClockwise();
+              });
+    }
+
+    public Command runTurretFerryPositionCommand(){
+         return run(
+            () -> {
+                setTurretTarget(DriveSubsystem.robotYaw); //TODO: fix this. this is probably inverted or smth idk
+
+            });
+    }
+
+    public Command runTurretHubCommand(){
+         return run(
+            () -> {
+                setTurretTarget(DriveSubsystem.robotYaw); 
+                //TODO: pass in target from calculations file instead of robot yaw once that is coded and these branches are merged
+
+            });
+    }
 
 
 

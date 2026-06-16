@@ -76,6 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Field2d field2d = new Field2d();
 
   public static double hubDistance = 0; 
+  public static Rotation2d robotYaw = Rotation2d.fromDegrees(0);
 
   
   public double targetx = 0;
@@ -179,6 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putData(field2d);
 
     hubDistance = getHubDistance();
+    robotYaw = getGyroRotation();
 
     SmartDashboard.putNumber("Driving/hub distance", getHubDistance());
     SmartDashboard.putNumber("Position", mBackRight.getPosition().angle.getRadians());
