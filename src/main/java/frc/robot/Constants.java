@@ -247,7 +247,7 @@ public final class Constants {
         public static final double RPMOFFSET_INCREMENT = 200;
         //hood constants 
 
-        public static final double HOOD_ANGLE_TO_SERVO_MULTIPLIER = 1.31487732675;
+        public static final double HOOD_ANGLE_TO_SERVO_MULTIPLIER = 1.5778527921;
         public static final Rotation2d MIN_HOOD_ANGLE = Rotation2d.fromDegrees(16.172); 
         
 
