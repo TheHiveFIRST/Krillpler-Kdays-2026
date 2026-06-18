@@ -42,6 +42,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
     public boolean turretTweaking = true;
+    public static double shooterRPM = 0;
+    public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
     //TODO: when turret is functional, set this to false upon initialization
   
 
@@ -103,12 +105,14 @@ public class ShooterSubsystem extends SubsystemBase {
     public void hoodAim(Rotation2d angle){
         hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
         * ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
+        hoodAngle = angle;
     }
 
     public void updateRPMs(){
         if (turretTweaking) {
             mTargetRPM = ShooterConstants.HUB_RPM;
             hoodAim(ShooterConstants.HUB_RPM_ANGLE);
+            shooterRPM = getAverageVelocity();
 
         } else {
             //TODO: when calculations file is completed, pass in those values here
