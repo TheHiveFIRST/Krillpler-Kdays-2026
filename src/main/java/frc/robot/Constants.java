@@ -259,7 +259,6 @@ public final class Constants {
         public static final double REGRESSION_COEFFICIENT_2 = -19.40655;
         public static final double REGRESSION_COEFFICIENT_1 = 537.37603;
         public static final double REGRESSION_COEFFICIENT_0 = 3253.61317;
-
     }
 
 
@@ -326,6 +325,107 @@ public final class Constants {
       public static final int TOP_BELTS_ID = 18;
       public static final int BOTTOM_BELTS_ID = 20;
       public static final int INDEXER_ID = 19;
+    }
+
+    public static final class CalcConstants { // Bahhhh all the comments are going to fry me...
+      //  FIELD GEOMETRY
+      //  Where the target is on the field. I would like to pull this from the existing hub position if possible.
+      // I do not want to make 2 different hubs for no reason. So if we could change this for later that would be great.
+      // TODO: change this to reference the real hub pose instead of hardcoding it here.
+  
+      // Hug coordinates. Please tune. In METERS
+      public static final Translation2d HUB_POSITION = new Translation2d(8.23, 4.11);
+  
+      // Height of the target opening above the floor, METRES. TODO: Tune this.
+      public static final double TARGET_HEIGHT_METERS = 2.64;
+  
+      // Height of the shooter exit above the floor, METRES. TODO: Tune this.
+      public static final double SHOOTER_HEIGHT_METERS = 0.60;
+
+
+      //  TURRET CONSTRAINTS  (the wiring limit -- it canNOT spin forever)
+      //  All angles in DEGREES, turret-relative (0 = pointing straight forward
+      //  off the chassis). The calculator clamps every output into this range.
+  
+      // Most negative angle the turret can mechanically/safely reach. TODO: Tune this.
+      public static final double TURRET_MIN_DEG = -200.0;
+  
+      // Most positive angle the turret can reach. TODO: Tune this. 
+      public static final double TURRET_MAX_DEG = 200.0;
+  
+      /** A soft buffer kept away from each hard limit, DEGREES. The calculator
+       *  will not command an angle inside this buffer, so the turret never slams
+       *  the hard stop / strains the wiring. TODO: Tune this. */
+      public static final double TURRET_SAFETY_BUFFER_DEG = 5.0;
+
+  
+      //  HOOD CONSTRAINTS  (it canNOT extend infinitely) -- Lmk if you prefer CANNOT or canNOT
+      //  Servo position is the [0,1] command; angle is the physical launch angle
+      //  that position produces. The map between them is assumed LINEAR; if the
+      //  hood is on a linkage and is NOT linear, replace the linear map in the
+      //  calculator with a measured lookup table.
+  
+      // Launch angle at servo position 0.0, DEGREES. TUNE (measure it). 
+      public static final double HOOD_MIN_ANGLE_DEG = 20.0;
+  
+      // Launch angle at servo position 1.0, DEGREES. TUNE (measure it). 
+      public static final double HOOD_MAX_ANGLE_DEG = 70.0;
+  
+      // Lowest servo position the hood is allowed to command, [0,1]. TODO: Tune this. Please.
+      public static final double HOOD_MIN_SERVO = 0.0;
+  
+      // Highest servo position the hood is allowed to command, [0,1]. TODO: Tune this.
+      public static final double HOOD_MAX_SERVO = 1.0;
+  
+
+      //  FLYWHEEL / SHOOTER GEOMETRY
+      //  Used to convert a required launch velocity (m/s) into a flywheel RPM.
+  
+      // Flywheel wheel radius, METRES. TODO: Tune this. Again...
+      public static final double WHEEL_RADIUS_METERS = 0.0508; // ~2 in, example. Tune again
+  
+      /** Gear ratio between motor and flywheel wheel (motor turns : wheel turns).
+       *  1.0 if direct drive. TODO: Tune this. Again.... */
+      public static final double FLYWHEEL_GEAR_RATIO = 1.0;
+  
+      /** Efficiency factor: real exit speed is lower than ideal wheel surface
+       *  speed because the ball slips/compresses. 1.0 = perfect, ~0.5-0.8 typical.
+       *  TODO: Tune this on the real shooter. */
+      public static final double SHOOTER_EFFICIENCY = 1.0;
+  
+      //  SHOT VALIDITY  (when is a firing solution even reasonable?)
+      //  Distances in METRES.
+  
+      /** Closest distance a shot is considered valid, METRES. TODO: Tune this. */
+      public static final double MIN_SHOT_DISTANCE = 0.5;
+  
+      /** Farthest distance a shot is considered valid, METRES. TODO: Tune this. */
+      public static final double MAX_SHOT_DISTANCE = 8.0;
+
+
+      //  LOOKUP TABLES  (distance METRES -> RPM, and distance METRES -> hood servo)
+      //  VALUES MUST BE RE-MEASURED for the new robot. The arrays are {distance, value} pairs.
+      //  The calculator loads these into InterpolatingDoubleTreeMaps.
+  
+      // {distanceMeters, rpm}. TODO: Tune every row on the real robot. 
+      public static final double[][] RPM_TABLE = {
+          {1.0, 2850.0},
+          {1.5, 3300.0},
+          {2.0, 3500.0},
+          {2.5, 3650.0},
+          {3.0, 3800.0},
+          {4.0, 4000.0},
+      };
+  
+      // Did I forget to mention TODO: TUNE!!
+      public static final double[][] HOOD_TABLE = {
+          {1.0, 0.90},
+          {1.5, 0.60},
+          {2.0, 0.45},
+          {2.5, 0.35},
+          {3.0, 0.30},
+          {4.0, 0.20},
+      };
     }
 }
 
