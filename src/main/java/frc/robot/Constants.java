@@ -269,8 +269,7 @@ public final class Constants {
     public static final class TurretConstants {
       //TODO: correct these once krillpler is wired
       public static final int TURRET_MOTOR_ID = 0;
-      public static final double TURRET_MIN_ROM = 0; // TBD what this is measured in
-      public static final double TURRET_MAX_ROM = 0;
+      public static final double TURRET_LOOP_POINT = 0; //measured in radians on domain (0, 2pi)
       // 0 is turret facing forwards
       public static final float TURRET_KP = 0;
       public static final float TURRET_KD = 0;

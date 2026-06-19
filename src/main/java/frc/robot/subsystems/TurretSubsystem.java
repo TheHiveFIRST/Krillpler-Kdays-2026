@@ -31,7 +31,12 @@ public class TurretSubsystem extends SubsystemBase{
 
     public double getMotorTarget(Rotation2d Rotationtarget){
         double unsafeMotorTarget = (Rotationtarget.getRadians() / (2*(Math.PI))) * TurretConstants.MOTOR_ROTATIONS_PER_TURRET_ROTATION;
-        double safeMotorTarget = Math.min(Math.max(unsafeMotorTarget, TurretConstants.TURRET_MIN_ROM) , TurretConstants.TURRET_MAX_ROM);
+        double safeMotorTarget;
+        if (unsafeMotorTarget > TurretConstants.TURRET_LOOP_POINT){
+            safeMotorTarget = unsafeMotorTarget - TurretConstants.MOTOR_ROTATIONS_PER_TURRET_ROTATION;
+        } else {
+            safeMotorTarget = unsafeMotorTarget;
+        }
         return safeMotorTarget;
     }
     
