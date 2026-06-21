@@ -261,13 +261,15 @@ public final class Constants {
     //this is nathans code, yet to be tested
 
     public static final class HopperConstants {
-        public static final int TOP_ROLLERS_ID = 0;
-        public static final int BELTS_ID = 0;
-        public static final int KICKER_ID = 0;
-        //TODO: correct these once krillpler is wired
+      public static final double HOPPER_SPEED = 0.5;
+      public static final double BELT_SPEED = 0.5;
+      public static final double OUTTAKE_HOPPER_SPEED = -0.5;
 
-       
-        
+      // TODO: update these once krillpler is built
+      public static final int TOP_ROLLERS_ID = 0;
+      public static final int TOP_BELTS_ID = 0;
+      public static final int BOTTOM_BELTS_ID = 0;
+      public static final int INDEXER_ID = 0;
     }
 
     public static final class TurretConstants {
