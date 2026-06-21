@@ -232,6 +232,8 @@ public final class Constants {
         public static final double KP_INCREMENT = 0.001;
         public static final double KI_INCREMENT = 0.0001;
         public static final double KD_INCREMENT = 0.0001;
+        public static final double HUB_RPM = 4000;
+        public static final Rotation2d HUB_RPM_ANGLE = Rotation2d.fromDegrees(20);
 
         
         ;
@@ -242,9 +244,11 @@ public final class Constants {
 
         
 
-        public static final double RPMOFFSET_INCREMENT = 200; 
+        public static final double RPMOFFSET_INCREMENT = 200;
+        //hood constants 
 
-        //Regression coefficients 
+        public static final double HOOD_ANGLE_TO_SERVO_MULTIPLIER = 1.909859317;
+        public static final Rotation2d MIN_HOOD_ANGLE = Rotation2d.fromDegrees(16.172); 
         
 
         //untested kinematics equation

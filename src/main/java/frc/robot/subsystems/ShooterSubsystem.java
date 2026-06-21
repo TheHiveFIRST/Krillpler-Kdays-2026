@@ -9,9 +9,12 @@ import com.revrobotics.ResetMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private final SparkMax mShooterLeader;
     private final SparkMax mShooterFollower;
-    
+    private final Servo hood = new Servo(1);
     private final RelativeEncoder mShooterLeaderEncoder;
     private final RelativeEncoder mShooterFollowerEncoder; 
     private final PIDController mShooterPID;
@@ -38,6 +41,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
+    public boolean turretTweaking = true;
+    public static double shooterRPM = 0;
+    public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
+    //TODO: when turret is functional, set this to false upon initialization
   
 
     //sysID 
@@ -70,79 +77,23 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // Methods
-
-    /**
-     * Main PID+feedforward controller that computes and applies motor output.
-     *
-     * @param setRPM desired shooter speed (RPM)
-     * @param RPMOffset offset to add to the desired RPM
-     */
-    public void setShooterSpeeds(double setRPM, double RPMOffset) {
-        double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
-        double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
-        double ffOutput = tempFF.calculate(setRPM + RPMOffset);
-        double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
-        runShooterPower(motorPower);
-    }
-
-    /**
-     * Compute a target RPM from a polynomial regression based on distance and
-     * update the internal target RPM. Falls back to a safe RPM if the
-     * regression suggests an unrealistically low value.
-     *
-     *  distance in meters
-     */
-    
-
-    /**
-     * Compute required wheel RPM from kinematic projectile motion equations and
-     * update the target RPM. Falls back for invalid geometry.
-     *
-     * 
-
-    /**
-     * Return the most recently computed kinematics RPM.
-     *
-     *  last computed kinematics RPM
-     */
-    
-    /**
-     * Directly set shooter motor power (open-loop).
-     *
-     * @param motorPower motor power in range [-1.0, 1.0]
-     */
     public void runShooterPower(double motorPower) {
         mShooterLeader.set(motorPower);
         mShooterFollower.set(motorPower);
     }
-
-    
-    /**
-     * Run kicker (feeder) motors. Follower is inverted relative to leader.
-     *
-     * @param speed motor speed in range [-1.0, 1.0]
-     */
-    
-
-    /**
-     * Get the average velocity of both shooter encoders (RPM).
-     *
-     * @return average RPM
-     */
     public double getAverageVelocity() {
         double sum = mShooterLeaderEncoder.getVelocity() + mShooterFollowerEncoder.getVelocity();
         double average = sum / 2;
         return average;
     }
 
-    /**
-     * Return the motor output computed by the PID+feedforward controller without
-     * applying it.
-     *
-     * @param setRPM desired RPM
-     * @param RPMOffset offset to add to desired RPM
-     * @return clipped motor output in [0,1]
-     */
+    public void setShooterSpeeds(double setRPM, double RPMOffset) {
+        double mCurrentRPM = getAverageVelocity();
+        double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
+        double ffOutput = tempFF.calculate(setRPM + RPMOffset);
+        double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
+        runShooterPower(motorPower);
+    }
     public double getShooterPIDF(double setRPM, double RPMOffset) {
         double mCurrentRPM = mShooterLeaderEncoder.getVelocity();
         double pidOutput = mShooterPID.calculate(mCurrentRPM, setRPM + RPMOffset);
@@ -151,69 +102,41 @@ public class ShooterSubsystem extends SubsystemBase {
         return motorPower;
     }
 
-    // Offsets and updates
-    /**
-     * Change the shooter RPM tuning offset.
-     *
-     * @param amount amount to change the offset by
-     */
+    public void hoodAim(Rotation2d angle){
+        hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
+        * ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
+        hoodAngle = angle;
+    }
+
+    public void updateRPMs(){
+        if (turretTweaking) {
+            mTargetRPM = ShooterConstants.HUB_RPM;
+            hoodAim(ShooterConstants.HUB_RPM_ANGLE);
+            shooterRPM = getAverageVelocity();
+
+        } else {
+            //TODO: when calculations file is completed, pass in those values here
+        }
+    }
+
     private void changeShootingRPMOffset(double amount) {
         ShooterRPMOffset += amount;
     }
 
-    /**
-     * Update the internal target RPM.
-     *
-     *  new target RPM
-     */
-    
-
-    /** Increase target RPM by configured increment */
-    public void incrementRPM() {
-        mTargetRPM += ShooterConstants.RPM_INCREMENT;
-    }
-
-    /** Decrease target RPM by configured increment */
-    public void decrementRPM() {
-        mTargetRPM -= ShooterConstants.RPM_INCREMENT;
-    }
-
-   
-
     //Commands 
-    
-    
-    public Command runShooterPIDFCommand() {
+     public Command runShooterPIDFCommand() {
          return run(
         () -> {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
               });
     }
     
-    
-    
-
-    //kicker commands
-    
-
-    
-
-    
-
-
-
     //toggles
     public Command toggleShooterCommand() {
         return new InstantCommand(() -> mShooterEnabled = !mShooterEnabled);}
-
-    
-    public Command toggleAutoShooterCommand() {
-       return new InstantCommand(() -> mShooterEnabled = true);}
-    
-    public Command toggleOffAutoShooterCommand() {
-       return new InstantCommand(() -> mShooterEnabled = false);}
-    
-    
+    public Command toggleShooterCaulculationsCommand() {
+        return new InstantCommand(() -> turretTweaking = !turretTweaking);}    
+ 
     public Command increaseShootingRPMOffsetCommand(){
     return new InstantCommand(() -> changeShootingRPMOffset(ShooterConstants.RPMOFFSET_INCREMENT));
     }
@@ -226,11 +149,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     //sysID tests 
-    
+    //TODO: add sysid tests
 
     @Override
     public void periodic() {
-        
+      updateRPMs();  
         
         
 
