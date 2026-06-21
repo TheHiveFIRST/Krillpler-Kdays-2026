@@ -62,7 +62,7 @@ public class VisionSubsystem extends SubsystemBase {
         if (visionEstLocal.isEmpty()) {
             visionEstLocal = photonEstimator.estimateLowestAmbiguityPose(result);
         }
-        return visionEst;
+        return visionEstLocal;
     }
 
     public PhotonTrackedTarget getCurrentIDResults(int ID) {
