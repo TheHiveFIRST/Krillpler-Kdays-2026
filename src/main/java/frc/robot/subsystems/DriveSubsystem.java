@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -16,7 +18,10 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -25,7 +30,11 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.config.PIDConstants;
 
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -41,7 +50,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
-
+import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import static edu.wpi.first.units.Units.Degrees;
@@ -411,24 +420,33 @@ SmartDashboard.putNumber("Driving/x", targetx);
         });
 
     boolean doRejectUpdate = false;
-    //TODO: edit the code below to use photonvision
-    /* 
-    LimelightHelpers.SetRobotOrientation("limelight", mPoseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-         
+
+    Optional<EstimatedRobotPose> visionEstimator = VisionSubsystem.visionEst;
+    
     if(Math.abs(mGyro.getRate()) > 720) {// if our angular velocity is greater than 720 degrees per second, ignore vision updates
       doRejectUpdate = true;
     }
-    if(mt2.tagCount == 0) {
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate) {
-      mPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(DriveConstants.VISION_STD_MTG2_N1, DriveConstants.VISION_STD_MTG2_N2, Units.degreesToRadians(5)));
+    if(visionEstimator.isPresent() && !doRejectUpdate) {
+      EstimatedRobotPose estVision = visionEstimator.get();
+
+      if (estVision.targetsUsed.size() > 1) {
+        mPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+        DriveConstants.VISION_STD_PTG2_N1, 
+        DriveConstants.VISION_STD_PTG2_N2, 
+        Units.degreesToRadians(5)));
+      }
+      else {
+        mPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+        DriveConstants.VISION_STD_PTG1_N1, 
+        DriveConstants.VISION_STD_PTG1_N2, 
+        Units.degreesToRadians(5)));
+      }
+
       mPoseEstimator.addVisionMeasurement(
-        mt2.pose,
-        mt2.timestampSeconds);   
+        estVision.estimatedPose.toPose2d(),
+        estVision.timestampSeconds
+      );
     }
-    */
   }
   
   public double getFerryDistance() {
@@ -582,4 +600,3 @@ private void logAngularChar() {
 }
 
   
-

@@ -139,11 +139,11 @@ public final class Constants {
     public static final double POSE_ESTIMATOR_2_N1 = 1;
     public static final double POSE_ESTIMATOR_2_N2 = 1;
 
-    public static final double VISION_STD_MTG1_N1 = 0.1;
-    public static final double VISION_STD_MTG1_N2 = 0.1;
+    public static final double VISION_STD_PTG1_N1 = 0.1;
+    public static final double VISION_STD_PTG1_N2 = 0.1;
 
-    public static final double VISION_STD_MTG2_N1 = 0.0001;
-    public static final double VISION_STD_MTG2_N2 = 0.0001;
+    public static final double VISION_STD_PTG2_N1 = 0.0001;
+    public static final double VISION_STD_PTG2_N2 = 0.0001;
 
 
   }
@@ -193,6 +193,9 @@ public final class Constants {
    public static final double LL_MOUNT_ANGLE_DEG = 0; //a1: degrees rotated up from vertical 
    public static final double LL_LENS_HEIGHT_IN = 7.1; //h1: distance from lens to floor 
    public static final double TARGET_HEIGHT_IN = 12.5;//44.25; //h2: height of target 
+   public static final double robotToCameraX = 0;//X distance from center of robot to camera
+   public static final double robotToCameraY = 0;//Y distance from center of robot to camera
+   public static final double robotToCameraZ = 0;//Z distance from center of robot to camera
   }
 
   public static final class MotorConstants {
@@ -274,4 +277,3 @@ public final class Constants {
 }
 
    
-
