@@ -13,7 +13,7 @@ public class HopperSubsystem extends SubsystemBase{
     private final WPI_TalonSRX mIndexer;
     private final WPI_TalonSRX mBottomBelt;
     
-    public boolean isShooting = false; // Just to track if we are shooting or not just in case. 
+    public static boolean isShooting = false; // Just to track if we are shooting or not just in case. 
     // Currently not in use.
      
 
@@ -48,14 +48,18 @@ public class HopperSubsystem extends SubsystemBase{
     public Command runTopRollerCommand() { // Moodshal said this can have problemss. 
         return run(
         () -> {
-            runTopRoller(HopperConstants.HOPPER_SPEED);
+            runTopRoller(HopperConstants.HOPPER_SLOW_SPEED);
               });
     }
 
     public Command runShootCommand() {
         return run(
             () -> {
-                runShoot(HopperConstants.HOPPER_SPEED);
+                if (IntakeSubsystem.isIntaking){
+                    runShoot(HopperConstants.HOPPER_SLOW_SPEED);
+                } else {
+                    runShoot(HopperConstants.HOPPER_FAST_SPEED);
+                }
             });
     }
 

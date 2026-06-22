@@ -41,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
-    public boolean turretTweaking = true;
+    public boolean DistanceEstimationEnabled = true;
     public static double shooterRPM = 0;
     public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
     //TODO: when turret is functional, set this to false upon initialization
@@ -109,7 +109,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void updateRPMs(){
-        if (turretTweaking) {
+        if (!DistanceEstimationEnabled) {
             mTargetRPM = ShooterConstants.HUB_RPM;
             hoodAim(ShooterConstants.HUB_RPM_ANGLE);
             shooterRPM = getAverageVelocity();
@@ -135,7 +135,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command toggleShooterCommand() {
         return new InstantCommand(() -> mShooterEnabled = !mShooterEnabled);}
     public Command toggleShooterCaulculationsCommand() {
-        return new InstantCommand(() -> turretTweaking = !turretTweaking);}    
+        return new InstantCommand(() -> DistanceEstimationEnabled = !DistanceEstimationEnabled);}    
  
     public Command increaseShootingRPMOffsetCommand(){
     return new InstantCommand(() -> changeShootingRPMOffset(ShooterConstants.RPMOFFSET_INCREMENT));

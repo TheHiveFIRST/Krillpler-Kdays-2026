@@ -21,6 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final WPI_TalonSRX mIntakeMotorFollower;
     private final DoubleSolenoid mPneumaticsLeader;
     private final DoubleSolenoid mPneumaticsFollower;
+    public static boolean isIntaking = false;
     
     public IntakeSubsystem() {
       mIntakeMotorLeader = new WPI_TalonSRX(IntakeConstants.INTAKE_LEADER_ID);
@@ -77,7 +78,12 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command runIntakeCommand() {
          return run(
         () -> {
-            setIntakePower(IntakeConstants.INTAKING_POWER);
+          if (HopperSubsystem.isShooting) {
+            setIntakePower(IntakeConstants.INTAKING_PARTIAL_POWER);
+          } else {
+          setIntakePower(IntakeConstants.INTAKING_FULL_POWER);
+          }
+            isIntaking = true;
               });
     }
 
@@ -85,6 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
          return run(
         () -> {
             stopIntake();
+            isIntaking = false;
               });
     }
 

@@ -205,7 +205,8 @@ public final class Constants {
   public static final class IntakeConstants {
         public static final int INTAKE_LEADER_ID = 0; //TODO: correct this once krillpler is built
         public static final int INTAKE_FOLLOWER_ID = 0;
-        public static final float INTAKING_POWER = 1; 
+        public static final double INTAKING_FULL_POWER = 1; 
+        public static final double INTAKING_PARTIAL_POWER = 0.5;
         public static final int LEADER_FORWARD_CHANNEL = 0;
         public static final int FOLLOWER_FORWARD_CHANNEL = 0;
         public static final int LEADER_REVERSE_CHANNEL = 1;
@@ -264,8 +265,10 @@ public final class Constants {
     //this is nathans code, yet to be tested
 
     public static final class HopperConstants {
-      public static final double HOPPER_SPEED = 0.5;
-      public static final double BELT_SPEED = 0.5;
+      public static final double HOPPER_FAST_SPEED = 0.8;
+      public static final double BELT_FAST_SPEED = 0.8;
+      public static final double HOPPER_SLOW_SPEED = 0.5;
+      public static final double BELT_SLOW_SPEED = 0.5;
       public static final double OUTTAKE_HOPPER_SPEED = -0.5;
 
       // TODO: update these once krillpler is built
