@@ -84,6 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
           setIntakePower(IntakeConstants.INTAKING_FULL_POWER);
           }
             isIntaking = true;
+            deployIntake();
               });
     }
 
@@ -91,6 +92,7 @@ public class IntakeSubsystem extends SubsystemBase {
          return run(
         () -> {
             stopIntake();
+            deployIntake();
             isIntaking = false;
               });
     }
@@ -106,6 +108,7 @@ public class IntakeSubsystem extends SubsystemBase {
          return run(
         () -> {
             retractIntake();
+            stopIntake();
               });
     }
 

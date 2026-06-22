@@ -2,7 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-
+import frc.robot.commands.autonomousTurretOperationCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.MathUtil;
@@ -73,7 +73,10 @@ public class RobotContainer {
             mDriveSubsystem));
 
        
-        // set default commands here
+        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
+        mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
+        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.runShooterPIDFCommand());
+        mTurretSubsystem.setDefaultCommand(runTurretAutomatically(mTurretSubsystem, mDriveSubsystem));
         
         
      }
@@ -82,8 +85,11 @@ public class RobotContainer {
     private void configureBindings() {
       
         //OPERATOR CONTROLS
-        mOperatorController.y().whileTrue(mShooterSubsystem.toggleShooterCommand());
-        
+        mOperatorController.y().onTrue(mShooterSubsystem.toggleShooterCommand());
+        mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
+        mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
+        mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
+        mOperatorController.b().whileTrue(mTurretSubsystem.stopTurretCommand());
         
         mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
@@ -93,13 +99,11 @@ public class RobotContainer {
 
         //DRIVER CONTROLS
         mDriverController.y().whileTrue(mShooterSubsystem.toggleShooterCommand()); 
-        
-        
-
-        
-     
-        
+        mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
+        mDriverController.rightBumper().whileTrue(mhoppersubsystem.runShootCommand());
+        mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
  
+        mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
         
 
@@ -155,7 +159,9 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
-  
+  public Command runTurretAutomatically(TurretSubsystem mTurretSubsystem, DriveSubsystem mDriveSubsystem){
+    return new autonomousTurretOperationCommand(mTurretSubsystem, mDriveSubsystem);
+  }
   
 
     

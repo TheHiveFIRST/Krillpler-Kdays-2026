@@ -70,6 +70,10 @@ public class TurretSubsystem extends SubsystemBase{
     public void periodic() {
         turretAtTarget = isTurretAtTarget();
     }
+
+    public void targetHub() {
+        setTurretTarget(new Rotation2d(0)); //TODO: pass in value from calc file here
+    }
     //commands
     public Command stopTurretCommand() {
          return run(
@@ -103,11 +107,13 @@ public class TurretSubsystem extends SubsystemBase{
     public Command runTurretHubCommand(){
          return run(
             () -> {
-                setTurretTarget(DriveSubsystem.robotYaw); 
+                targetHub();; 
                 //TODO: pass in target from calculations file instead of robot yaw once that is coded and these branches are merged
 
             });
     }
+
+
 
 
 

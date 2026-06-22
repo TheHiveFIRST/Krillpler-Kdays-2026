@@ -86,6 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public static double hubDistance = 0; 
   public static Rotation2d robotYaw = Rotation2d.fromDegrees(0);
+  public static Boolean inAliianceZone = true;
 
   
   public double targetx = 0;
