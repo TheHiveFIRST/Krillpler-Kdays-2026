@@ -395,6 +395,18 @@ public final class Constants {
       
     }
 
+
+
+
+    /*
+     * if eshan_is_stooooopid True
+     * /import Eshan_toucher_3000
+     * 'punch'
+     * 
+     * 
+     * ^^ben's code, also yet to be tested
+     */
+
 }
 
    

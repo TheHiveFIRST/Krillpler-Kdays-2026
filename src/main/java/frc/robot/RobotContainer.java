@@ -85,12 +85,15 @@ public class RobotContainer {
     private void configureBindings() {
       
         //OPERATOR CONTROLS
+        //shooter toggle
         mOperatorController.y().onTrue(mShooterSubsystem.toggleShooterCommand());
+        //will toggle the regression: if this is pressed then the shooter will run at hub RPM (manual adjustments are allowed)
         mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
+        //manual turret controls
         mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
         mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
-        mOperatorController.b().whileTrue(mTurretSubsystem.stopTurretCommand());
-        
+        mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
+        //manual shooting power controls
         mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
 
@@ -98,44 +101,20 @@ public class RobotContainer {
 
 
         //DRIVER CONTROLS
-        mDriverController.y().whileTrue(mShooterSubsystem.toggleShooterCommand()); 
+        
+        //the intake is deployed by default, this just runs the rollers
         mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
+        
+        //will enable slowmode when shooting
         mDriverController.rightBumper().whileTrue(mhoppersubsystem.runShootCommand());
+        mDriverController.rightBumper().onChange(toggleSlowMode());
+        
+        //retracts the intake and stops the rollers
         mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
  
+        
         mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
-        
-
-        /*mDriverController.povLeft().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
-        mDriverController.povRight().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
-        mDriverController.povDown().onTrue(toggleSlowMode());
-        mDriverController.povUp().whileTrue(mIntakeSubsystem.runIntakeSlowCommand());*/
-       // mDriverController.povUp().onTrue(mShooterSubsystem.runOnce(mDriveSubsystem::incrementPalign));
-       // mDriverController.povDown().onTrue(mShooterSubsystem.runOnce(mDriveSubsystem::decrementPalign));
-        //mDriverController.povDown().onTrue(mShooterSubsystem.runOnce(mShooterSubsystem::decrementRPM));
-
-
-        // tag based autoalign, useful for pick and place with alignment in x and y 
-        //mDriverController.a().whileTrue(new RunCommand(
-        //  () -> mDriveSubsystem.driveJoystick(
-        //    MathUtil.applyDeadband(-mDriverController.getLeftY(), OperatorConstants.DRIVE_DEADBAND),
-        //    MathUtil.applyDeadband(-mDriverController.getLeftX(), OperatorConstants.DRIVE_DEADBAND),
-        //   -mVisionSubsystem.autoAlignRotationSpeed(), 
-        //   true), mDriveSubsystem));
-    
-
-       
-        //PID TUNING
-        // Back Button
-       //mDriverController.back()
-           // .whileTrue(mShooterSubsystem.run(mShooterSubsystem::cycleTuningMode))
-           // .debounce(0.3); // Prevents accidental double presses
-        
-        //mDriverController.start().onTrue(mShooterSubsystem.runOnce(mShooterSubsystem::incrementCurrentGain));
-        //mDriverController.back().onTrue(mShooterSubsystem.runOnce(mShooterSubsystem::decrementCurrentGain));
-        //mDriverController.povUp().onTrue(mShooterSubsystem.runOnce(mShooterSubsystem::incrementKP));
-        //mDriverController.povDown().onTrue(mShooterSubsystem.runOnce(mShooterSubsystem::decrementKP));
 
     }
 

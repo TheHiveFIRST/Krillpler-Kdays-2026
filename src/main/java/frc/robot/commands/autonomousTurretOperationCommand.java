@@ -14,12 +14,15 @@ public class autonomousTurretOperationCommand extends RunCommand {
 
         super(
             () -> {
-            
-            if (mDriveSubsystem.inAliianceZone){
-                mTurretSubsystem.targetHub();
-            } else {
-                mTurretSubsystem.setTurretTarget(mDriveSubsystem.getGyroRotation());
+            if (mTurretSubsystem.turretEnabled){
+                if (mDriveSubsystem.inAliianceZone){
+                    mTurretSubsystem.targetHub();
+                } else {
+                    mTurretSubsystem.setTurretTarget(mDriveSubsystem.getGyroRotation());
 
+                }
+            } else {
+                mTurretSubsystem.stopTurret();
             }
             },
             mTurretSubsystem

@@ -10,6 +10,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.configs.TurretConfig;
@@ -111,6 +112,11 @@ public class TurretSubsystem extends SubsystemBase{
                 //TODO: pass in target from calculations file instead of robot yaw once that is coded and these branches are merged
 
             });
+    }
+    public Command toggleTurretCommand(){
+        return new InstantCommand(() -> turretEnabled = !turretEnabled);
+
+        
     }
 
 
