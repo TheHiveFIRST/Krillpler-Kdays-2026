@@ -110,7 +110,8 @@ public class RobotContainer {
         mDriverController.rightBumper().onChange(toggleSlowMode());
         
         //retracts the intake and stops the rollers
-        mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
+        //mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
+        //removed because apparently we have a roller floor now
  
         
         mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
