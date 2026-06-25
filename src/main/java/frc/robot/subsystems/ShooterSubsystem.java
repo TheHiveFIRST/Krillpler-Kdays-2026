@@ -21,8 +21,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.global.Calculation.SolveFiringSolution;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.configs.ShootConfig.ShooterConfig;
+
+import frc.robot.subsystems.DriveSubsystem;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -51,9 +54,12 @@ public class ShooterSubsystem extends SubsystemBase {
  
     
 
-   
+   private final DriveSubsystem mDriveSubsystemInShooter;  // pass drivesubsytem to access position for calc
+   private final SolveFiringSolution mCalculationFileSubsystem; // pass SolveFiringSolution to access non-static methods
 
-    public ShooterSubsystem() {
+    public ShooterSubsystem(DriveSubsystem mDriveSubsystem) {
+        this.mDriveSubsystemInShooter = mDriveSubsystem;
+        this.mCalculationFileSubsystem = new SolveFiringSolution();
     
         mShooterLeader = new SparkMax(ShooterConstants.SHOOTER_LEADER_CANID, MotorType.kBrushless);
         mShooterFollower = new SparkMax(ShooterConstants.SHOOTER_FOLLOWER_CANID, MotorType.kBrushless);
@@ -109,13 +115,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void updateRPMs(){
+        shooterRPM = getAverageVelocity(); // find shooterRPM (used both if DistanceEstimation is enabled or disabled)
         if (!DistanceEstimationEnabled) {
             mTargetRPM = ShooterConstants.HUB_RPM;
             hoodAim(ShooterConstants.HUB_RPM_ANGLE);
-            shooterRPM = getAverageVelocity();
 
         } else {
-            //TODO: when calculations file is completed, pass in those values here
+            //Get data from calc file (instance) for shooter motor/servo using information from the DriveSubsystem (instance)
+            final SolveFiringSolution.FiringSolution shooterData = mCalculationFileSubsystem.solve(mDriveSubsystemInShooter.getPose() , mDriveSubsystemInShooter.getRobotRelativeSpeeds());
+            mTargetRPM = shooterData.flywheelRpm;
+            final Rotation2d hoodAngle = Rotation2d.fromDegrees(shooterData.hoodServoPos);
+            hoodAim(hoodAngle);
         }
     }
 

@@ -33,7 +33,7 @@ public class RobotContainer {
   private final VisionSubsystem mVisionSubsystem = new VisionSubsystem(); 
   private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
   private final HopperSubsystem mhoppersubsystem = new HopperSubsystem();
-  private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(); 
+  private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(mDriveSubsystem); // pass mDriveSubsytem in to access non-static methods getRobotRelativeSpeeds() and getPose()
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
   private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final SendableChooser<Command> autoChooser;
