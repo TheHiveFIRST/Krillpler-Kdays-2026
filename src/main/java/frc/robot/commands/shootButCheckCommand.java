@@ -23,7 +23,9 @@ public class shootButCheckCommand extends RunCommand {
                 mHopperSubsystem.stopShootingCommand();
             }
             },
-            mTurretSubsystem
+            mTurretSubsystem,
+            mShooterSubsystem,
+            mHopperSubsystem
         
         );
     }
