@@ -45,6 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
     public boolean DistanceEstimationEnabled = true;
+    private boolean atSpeed = false; // SHOULD THIS BE STATIC if it is accessed in the shootButCheckCommand
     public static double shooterRPM = 0;
     public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
     //TODO: when turret is functional, set this to false upon initialization
@@ -106,6 +107,10 @@ public class ShooterSubsystem extends SubsystemBase {
         double ffOutput = tempFF.calculate(setRPM + RPMOffset);
         double motorPower = MathUtil.clamp(pidOutput + ffOutput, 0.0, 1.0);
         return motorPower;
+    }
+
+    public boolean isAtSpeed(){
+        return atSpeed;
     }
 
     public void hoodAim(Rotation2d angle){
@@ -177,7 +182,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Actual RPM", mShooterLeaderEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter/RPM Offset", ShooterRPMOffset);
         
-    boolean atSpeed = Math.abs(mShooterLeaderEncoder.getVelocity() - (mTargetRPM + ShooterRPMOffset))
+    atSpeed = Math.abs(mShooterLeaderEncoder.getVelocity() - (mTargetRPM + ShooterRPMOffset))
         < ShooterConstants.VELOCITY_TOLERANCE;
         SmartDashboard.putBoolean("Shooter/Shooter Ready", atSpeed);
         SmartDashboard.putBoolean("Shooter/Shooter Toggled", mShooterEnabled);
