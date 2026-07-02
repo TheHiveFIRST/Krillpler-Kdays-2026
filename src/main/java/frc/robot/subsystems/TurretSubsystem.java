@@ -14,17 +14,28 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.configs.TurretConfig;
+import frc.robot.global.Calculation.SolveFiringSolution;
 public class TurretSubsystem extends SubsystemBase{
+    //initialized hardware
     TalonFX mTurretMotor = new TalonFX(TurretConstants.TURRET_MOTOR_ID);
     double TurretMotorTarget = 0;
+    //public static variables
     public static boolean turretAtTarget = false;
     public static boolean turretEnabled = true;
+    //kraken stuff
     PositionVoltage turnPositionRequest = new PositionVoltage(0);
     VelocityVoltage manualVelocityRequest = new VelocityVoltage(0);
-    public TurretSubsystem() {
+
+    private final DriveSubsystem mDriveSubsystemInTurret;  // pass drivesubsytem to access position for calc
+   private final SolveFiringSolution mCalculations; // pass SolveFiringSolution to access non-static methods
+
+    
+    public TurretSubsystem(DriveSubsystem mDriveSubsystem) {
+
     
         mTurretMotor.getConfigurator().apply(TurretConfig.trackHub);
-        
+        this.mDriveSubsystemInTurret = mDriveSubsystem;
+        this.mCalculations = new SolveFiringSolution();
 
 
 
@@ -73,7 +84,10 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void targetHub() {
-        setTurretTarget(new Rotation2d(0)); //TODO: pass in value from calc file here
+        
+        final SolveFiringSolution.FiringSolution turretData = mCalculations.solve(mDriveSubsystemInTurret.getPose(), mDriveSubsystemInTurret.getRobotRelativeSpeeds());
+        
+        setTurretTarget(turretData.turretAngle); 
     }
     //commands
     public Command stopTurretCommand() {
@@ -109,8 +123,7 @@ public class TurretSubsystem extends SubsystemBase{
          return run(
             () -> {
                 targetHub();; 
-                //TODO: pass in target from calculations file instead of robot yaw once that is coded and these branches are merged
-
+                
             });
     }
     public Command toggleTurretCommand(){

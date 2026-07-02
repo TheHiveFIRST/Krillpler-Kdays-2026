@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.autonomousTurretOperationCommand;
+import frc.robot.commands.shootButCheckCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.MathUtil;
@@ -35,7 +36,7 @@ public class RobotContainer {
   private final HopperSubsystem mhoppersubsystem = new HopperSubsystem();
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(mDriveSubsystem); // pass mDriveSubsytem in to access non-static methods getRobotRelativeSpeeds() and getPose()
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
-  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
+  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem(mDriveSubsystem);
   private final SendableChooser<Command> autoChooser;
 
   private final CommandXboxController mDriverController = 
@@ -106,7 +107,7 @@ public class RobotContainer {
         mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
         
         //will enable slowmode when shooting
-        mDriverController.rightBumper().whileTrue(mhoppersubsystem.runShootCommand());
+        mDriverController.rightBumper().whileTrue(runHopperAutomaticallyCommand(mTurretSubsystem, mhoppersubsystem, mShooterSubsystem));
         mDriverController.rightBumper().onChange(toggleSlowMode());
         
         //retracts the intake and stops the rollers
@@ -143,7 +144,9 @@ public class RobotContainer {
     return new autonomousTurretOperationCommand(mTurretSubsystem, mDriveSubsystem);
   }
   
-
+ public Command runHopperAutomaticallyCommand(TurretSubsystem mTurretSubsystem, HopperSubsystem mHopperSubsystem, ShooterSubsystem mShooterSubsystem){
+   return new shootButCheckCommand(mTurretSubsystem, mShooterSubsystem, mHopperSubsystem);
+ }
     
   
 

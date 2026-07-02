@@ -12,6 +12,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 import frc.robot.Constants.CalcConstants;
+import frc.robot.Constants.TurretConstants;
 
 /**
  * READ ME
@@ -108,17 +109,15 @@ public class SolveFiringSolution {
         double turretRelDeg = fieldAngle.getDegrees()
                 - robotPose.getRotation().getDegrees();              // turret frame
         turretRelDeg = MathUtil.inputModulus(turretRelDeg, -180.0, 180.0);
+        Rotation2d turretTarget = new Rotation2d().fromDegrees(turretRelDeg);
 
         // apply the turret's wiring limit 
         // The turret canNOT (CANNOT OR canNOT? lmk) spin forever. Clamp into the safe travel range, kept
         // a buffer away from the hard stops. NOTE: this clamps the COMMAND; if the
         // clamped angle no longer points at the target, the shot is marked invalid
         // below so nobody fires into a wall thinking they are aimed.
-        double clampedTurretDeg = MathUtil.clamp(
-                turretRelDeg,
-                CalcConstants.TURRET_MIN_DEG + CalcConstants.TURRET_SAFETY_BUFFER_DEG,
-                CalcConstants.TURRET_MAX_DEG - CalcConstants.TURRET_SAFETY_BUFFER_DEG);
-        boolean turretReachable = Math.abs(clampedTurretDeg - turretRelDeg) < 1e-6;
+        
+        boolean turretReachable = Math.abs(turretTarget.getRadians() - TurretConstants.TURRET_LOOP_POINT) < 1e-6;
 
         // distance to the virtual target, for the final RPM/hood 
         double virtualDistance = virtualTarget.minus(robotXY).getNorm();
@@ -134,7 +133,7 @@ public class SolveFiringSolution {
                 && virtualDistance <= CalcConstants.MAX_SHOT_DISTANCE;
         boolean validShot = inRange && turretReachable;
 
-        return new FiringSolution(clampedTurretDeg, hoodServo, rpm, virtualDistance, validShot);
+        return new FiringSolution(turretTarget, hoodServo, rpm, virtualDistance, validShot);
     }
 
     /**
@@ -176,7 +175,7 @@ public class SolveFiringSolution {
      */
     public static final class FiringSolution {
         // Turret angle, DEGREES, turret-relative, already clamped to limits. 
-        public final double turretAngleDeg;
+        public final Rotation2d turretAngle;
         // Hood servo position, [0,1], already clamped. 
         public final double hoodServoPos;
         // Flywheel target speed, RPM. 
@@ -186,10 +185,10 @@ public class SolveFiringSolution {
         // True only if in range AND the turret can actually point there.   
         public final boolean validShot;
 
-        public FiringSolution(double turretAngleDeg, double hoodServoPos,
+        public FiringSolution(Rotation2d turretAngle, double hoodServoPos,
                               double flywheelRpm, double distanceMeters,
                               boolean validShot) {
-            this.turretAngleDeg = turretAngleDeg;
+            this.turretAngle = turretAngle;
             this.hoodServoPos = hoodServoPos;
             this.flywheelRpm = flywheelRpm;
             this.distanceMeters = distanceMeters;

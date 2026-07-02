@@ -48,10 +48,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean atSpeed = false; // SHOULD THIS BE STATIC if it is accessed in the shootButCheckCommand
     public static double shooterRPM = 0;
     public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
-    //TODO: when turret is functional, set this to false upon initialization
+    
   
 
-    //sysID 
+    
  
     
 
