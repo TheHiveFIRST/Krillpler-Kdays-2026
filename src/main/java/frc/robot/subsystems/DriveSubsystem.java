@@ -412,7 +412,7 @@ SmartDashboard.putNumber("Driving/x", targetx);
   }
 
     /** Updates the field relative position of the robot. */
-  public void updateVisionOdometry() {
+  public void updateVisionOdometry() { /* 
     mPoseEstimator.update(
           getGyroRotation(),
         new SwerveModulePosition[] {
@@ -449,7 +449,7 @@ SmartDashboard.putNumber("Driving/x", targetx);
         estVision.estimatedPose.toPose2d(),
         estVision.timestampSeconds
       );
-    }
+    }*/
   }
   
   public double getFerryDistance() {

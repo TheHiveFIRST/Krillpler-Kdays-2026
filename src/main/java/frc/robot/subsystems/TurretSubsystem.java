@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.configs.TurretConfig;
-import frc.robot.global.Calculation.SolveFiringSolution;
+
 public class TurretSubsystem extends SubsystemBase{
     //initialized hardware
     TalonFX mTurretMotor = new TalonFX(TurretConstants.TURRET_MOTOR_ID);
@@ -26,16 +26,14 @@ public class TurretSubsystem extends SubsystemBase{
     PositionVoltage turnPositionRequest = new PositionVoltage(0);
     VelocityVoltage manualVelocityRequest = new VelocityVoltage(0);
 
-    private final DriveSubsystem mDriveSubsystemInTurret;  // pass drivesubsytem to access position for calc
-   private final SolveFiringSolution mCalculations; // pass SolveFiringSolution to access non-static methods
+   
 
     
-    public TurretSubsystem(DriveSubsystem mDriveSubsystem) {
+    public TurretSubsystem() {
 
     
         mTurretMotor.getConfigurator().apply(TurretConfig.trackHub);
-        this.mDriveSubsystemInTurret = mDriveSubsystem;
-        this.mCalculations = new SolveFiringSolution();
+        
 
 
 
@@ -83,12 +81,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretAtTarget = isTurretAtTarget();
     }
 
-    public void targetHub() {
-        
-        final SolveFiringSolution.FiringSolution turretData = mCalculations.solve(mDriveSubsystemInTurret.getPose(), mDriveSubsystemInTurret.getRobotRelativeSpeeds());
-        
-        setTurretTarget(turretData.turretAngle); 
-    }
+    
     //commands
     public Command stopTurretCommand() {
          return run(
@@ -119,13 +112,7 @@ public class TurretSubsystem extends SubsystemBase{
             });
     }
 
-    public Command runTurretHubCommand(){
-         return run(
-            () -> {
-                targetHub();; 
-                
-            });
-    }
+    
     public Command toggleTurretCommand(){
         return new InstantCommand(() -> turretEnabled = !turretEnabled);
 

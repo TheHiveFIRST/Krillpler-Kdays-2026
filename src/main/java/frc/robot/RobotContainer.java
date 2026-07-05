@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+
 import frc.robot.subsystems.IntakeSubsystem;
 
 
@@ -31,12 +31,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 
 public class RobotContainer {
-  private final VisionSubsystem mVisionSubsystem = new VisionSubsystem(); 
+  
   private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
   private final HopperSubsystem mhoppersubsystem = new HopperSubsystem();
-  private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(mDriveSubsystem); // pass mDriveSubsytem in to access non-static methods getRobotRelativeSpeeds() and getPose()
+  private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(); // pass mDriveSubsytem in to access non-static methods getRobotRelativeSpeeds() and getPose()
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
-  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem(mDriveSubsystem);
+  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final SendableChooser<Command> autoChooser;
 
   private final CommandXboxController mDriverController = 
