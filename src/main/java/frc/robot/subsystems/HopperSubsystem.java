@@ -5,13 +5,20 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.configs.HopperConfig;
+import frc.robot.configs.ShootConfig.ShooterConfig;
+
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 
 public class HopperSubsystem extends SubsystemBase{
 
     private final WPI_TalonSRX mTopRoller;
-    private final WPI_TalonSRX mTopBelt;
+   
     private final WPI_TalonSRX mIndexer;
-    private final WPI_TalonSRX mBottomBelt;
+    private final SparkMax mBelts;
     
     public static boolean isShooting = false; // Just to track if we are shooting or not just in case. 
     // Currently not in use.
@@ -20,13 +27,13 @@ public class HopperSubsystem extends SubsystemBase{
     public HopperSubsystem(){
         
         mTopRoller = new WPI_TalonSRX(HopperConstants.TOP_ROLLERS_ID);
-        mBottomBelt = new WPI_TalonSRX(HopperConstants.BOTTOM_BELTS_ID);
-        mTopBelt = new WPI_TalonSRX(HopperConstants.TOP_BELTS_ID);
+        mBelts = new SparkMax(HopperConstants.TOP_BELTS_ID, MotorType.kBrushless);
         mIndexer = new WPI_TalonSRX(HopperConstants.INDEXER_ID);
 
         HopperConfig.configure(mTopRoller);
-        HopperConfig.configure(mBottomBelt);
-        HopperConfig.configure(mTopBelt);
+        mBelts.configure(ShooterConfig.shooterLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        
         HopperConfig.configure(mIndexer);
     } 
 
@@ -35,8 +42,7 @@ public class HopperSubsystem extends SubsystemBase{
     }
 
     public void runShoot(double speed) {
-        mTopBelt.set(speed);
-        mBottomBelt.set(speed);
+        mBelts.set(speed);
         mIndexer.set(speed);
     }
 
