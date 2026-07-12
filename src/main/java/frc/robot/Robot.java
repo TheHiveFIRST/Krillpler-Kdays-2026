@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private Timer m_timer;
 
   private String m_autoName = "BLANK_AUTO";
 
@@ -64,18 +66,19 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     DriveSubsystem.useInvertedGyro = true;
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_autoName = m_autonomousCommand.getName();
-    
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    m_timer.reset();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if (m_timer.get() < 2) {
+      
+
+    } else {
+      
+    }
+  }
 
   @Override
   public void teleopInit() {

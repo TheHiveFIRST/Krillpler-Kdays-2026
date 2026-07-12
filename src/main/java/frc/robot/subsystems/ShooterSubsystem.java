@@ -44,7 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
     private boolean mShooterEnabled = false;
-    public boolean DistanceEstimationEnabled = true;
+    public boolean DistanceEstimationEnabled = false;
     private boolean atSpeed = false; // SHOULD THIS BE STATIC if it is accessed in the shootButCheckCommand
     public static double shooterRPM = 0;
     public static Rotation2d hoodAngle = new Rotation2d().fromDegrees(0);
@@ -112,9 +112,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void hoodAim(Rotation2d angle){
-        hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
-        * ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
-        hoodAngle = angle;
+        //hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
+        //* ShooterConstants.HOOD_ANGLE_TO_SERVO_MULTIPLIER );
+        //hoodAngle = angle;
     }
 
     public void updateRPMs(){

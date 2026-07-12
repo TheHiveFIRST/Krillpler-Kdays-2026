@@ -21,7 +21,7 @@ public class TurretSubsystem extends SubsystemBase{
     double TurretMotorTarget = 0;
     //public static variables
     public static boolean turretAtTarget = false;
-    public static boolean turretEnabled = true;
+    public static boolean turretEnabled = false;
     //kraken stuff
     PositionVoltage turnPositionRequest = new PositionVoltage(0);
     VelocityVoltage manualVelocityRequest = new VelocityVoltage(0);

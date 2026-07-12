@@ -22,9 +22,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.events.EventTrigger;
+
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,8 +34,8 @@ public class RobotContainer {
   private final HopperSubsystem mhoppersubsystem = new HopperSubsystem();
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem(); // pass mDriveSubsytem in to access non-static methods getRobotRelativeSpeeds() and getPose()
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem(); 
-  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
-  private final SendableChooser<Command> autoChooser;
+  //private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
+
 
   private final CommandXboxController mDriverController = 
       new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER);
@@ -57,8 +55,7 @@ public class RobotContainer {
 
 
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    Shuffleboard.getTab("Autonomous").add("Auto Mode", autoChooser).withSize(2, 1);
+    
     
     
     configureBindings();
@@ -77,7 +74,7 @@ public class RobotContainer {
         mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
         mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
         mShooterSubsystem.setDefaultCommand(mShooterSubsystem.runShooterPIDFCommand());
-        mTurretSubsystem.setDefaultCommand(runTurretAutomatically(mTurretSubsystem, mDriveSubsystem));
+        //mTurretSubsystem.setDefaultCommand(mTurretSubsystem.stopTurretCommand());
         
         
      }
@@ -89,11 +86,11 @@ public class RobotContainer {
         //shooter toggle
         mOperatorController.y().onTrue(mShooterSubsystem.toggleShooterCommand());
         //will toggle the regression: if this is pressed then the shooter will run at hub RPM (manual adjustments are allowed)
-        mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
+        //mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
         //manual turret controls
-        mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
-        mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
-        mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
+        //mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
+        //mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
+        //mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
         //manual shooting power controls
         mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
         mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
@@ -107,7 +104,7 @@ public class RobotContainer {
         mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
         
         //will enable slowmode when shooting
-        mDriverController.rightBumper().whileTrue(runHopperAutomaticallyCommand(mTurretSubsystem, mhoppersubsystem, mShooterSubsystem));
+        mDriverController.rightBumper().whileTrue(mhoppersubsystem.runShootCommand());
         mDriverController.rightBumper().onChange(toggleSlowMode());
         
         //retracts the intake and stops the rollers
@@ -125,6 +122,8 @@ public class RobotContainer {
     }
 
     
+
+    
     
     public Command toggleSlowMode(){
         return new InstantCommand(() -> slowMode = !slowMode);
@@ -136,17 +135,15 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-  }
-
-  public Command runTurretAutomatically(TurretSubsystem mTurretSubsystem, DriveSubsystem mDriveSubsystem){
-    return new autonomousTurretOperationCommand(mTurretSubsystem, mDriveSubsystem);
-  }
   
- public Command runHopperAutomaticallyCommand(TurretSubsystem mTurretSubsystem, HopperSubsystem mHopperSubsystem, ShooterSubsystem mShooterSubsystem){
-   return new shootButCheckCommand(mTurretSubsystem, mShooterSubsystem, mHopperSubsystem);
- }
+
+  //public Command runTurretAutomatically(TurretSubsystem mTurretSubsystem, DriveSubsystem mDriveSubsystem){
+  //  return new autonomousTurretOperationCommand(mTurretSubsystem, mDriveSubsystem);
+  //}
+  
+ //public Command runHopperAutomaticallyCommand(TurretSubsystem mTurretSubsystem, HopperSubsystem mHopperSubsystem, ShooterSubsystem mShooterSubsystem){
+ //  return new shootButCheckCommand(mTurretSubsystem, mShooterSubsystem, mHopperSubsystem);
+ //}
     
   
 
