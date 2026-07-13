@@ -16,7 +16,7 @@ import com.revrobotics.ResetMode;
 public class HopperSubsystem extends SubsystemBase{
 
     private final WPI_TalonSRX mTopRoller;
-   
+    private final WPI_TalonSRX mRollerFloor;
     private final WPI_TalonSRX mIndexer;
     private final SparkMax mBelts;
     
@@ -27,6 +27,7 @@ public class HopperSubsystem extends SubsystemBase{
     public HopperSubsystem(){
         
         mTopRoller = new WPI_TalonSRX(HopperConstants.TOP_ROLLERS_ID);
+        mRollerFloor = new WPI_TalonSRX(HopperConstants.ROLLER_FLOOR_ID);
         mBelts = new SparkMax(HopperConstants.TOP_BELTS_ID, MotorType.kBrushless);
         mIndexer = new WPI_TalonSRX(HopperConstants.INDEXER_ID);
 
@@ -35,6 +36,7 @@ public class HopperSubsystem extends SubsystemBase{
         
         
         HopperConfig.configure(mIndexer);
+        HopperConfig.configure(mRollerFloor);
     } 
 
     public void runTopRoller(double speed) {
@@ -43,11 +45,19 @@ public class HopperSubsystem extends SubsystemBase{
 
     public void runShoot(double speed) {
         mBelts.set(speed);
-        mIndexer.set(speed);
+        mIndexer.set(-speed);
+        mRollerFloor.set(speed);
+        mTopRoller.set(0.5 * speed);
+    }
+    public void runShootUnjam(double speed) {
+        mBelts.set(speed);
+        mIndexer.set(-speed);
+        mRollerFloor.set(-speed);
+        mTopRoller.set(-speed);
     }
 
     public void stopShooting() {
-        runTopRoller(0);
+        
         runShoot(0);
     }
 
@@ -68,6 +78,17 @@ public class HopperSubsystem extends SubsystemBase{
                 }
             });
     }
+    public Command runShootUnjamCommand() {
+        return run(
+            () -> {
+                if (IntakeSubsystem.isIntaking){
+                    runShootUnjam(HopperConstants.HOPPER_SLOW_SPEED);
+                } else {
+                    runShootUnjam(HopperConstants.HOPPER_FAST_SPEED);
+                }
+            });
+    }
+    
 
     public Command stopShootingCommand() {
         return run(

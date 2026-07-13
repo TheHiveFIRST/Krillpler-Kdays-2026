@@ -4,6 +4,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.autonomousTurretOperationCommand;
 import frc.robot.commands.shootButCheckCommand;
+import frc.robot.commands.shootUnjamSequence;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.MathUtil;
@@ -73,7 +74,7 @@ public class RobotContainer {
        
         mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
         mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
-        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.runShooterPIDFCommand());
+        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.runShooterCommand());
         //mTurretSubsystem.setDefaultCommand(mTurretSubsystem.stopTurretCommand());
         
         
@@ -104,7 +105,7 @@ public class RobotContainer {
         mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
         
         //will enable slowmode when shooting
-        mDriverController.rightBumper().whileTrue(mhoppersubsystem.runShootCommand());
+        mDriverController.rightBumper().whileTrue(RunHopperUnjam().repeatedly());
         mDriverController.rightBumper().onChange(toggleSlowMode());
         
         //retracts the intake and stops the rollers
@@ -127,6 +128,13 @@ public class RobotContainer {
     
     public Command toggleSlowMode(){
         return new InstantCommand(() -> slowMode = !slowMode);
+    }
+
+    public Command RunHopperShoot(){
+        return mhoppersubsystem.runShootCommand();
+    }
+    public Command RunHopperUnjam(){
+        return new shootUnjamSequence(mhoppersubsystem);
     }
 
   

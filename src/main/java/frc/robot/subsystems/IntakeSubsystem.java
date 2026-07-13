@@ -3,6 +3,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -12,43 +16,48 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.configs.IntakeConfig;
+import frc.robot.configs.ShootConfig.ShooterConfig;
 
 
 public class IntakeSubsystem extends SubsystemBase {
   // declare motors/controllers here
-    private final WPI_TalonSRX mIntakeMotorLeader;
-    private final WPI_TalonSRX mIntakeMotorFollower;
+    private final SparkMax mIntakeMotor;
+    
     
     public static boolean isIntaking = false;
     
     public IntakeSubsystem() {
-      mIntakeMotorLeader = new WPI_TalonSRX(IntakeConstants.INTAKE_LEADER_ID);
-      mIntakeMotorFollower = new WPI_TalonSRX(IntakeConstants.INTAKE_FOLLOWER_ID);
+       mIntakeMotor = new SparkMax(15, MotorType.kBrushless);
+        
 
-      TalonSRXConfiguration config = new TalonSRXConfiguration();
-      config.peakCurrentLimit = 40; //amps
-      config.peakCurrentDuration = 200;
-      config.continuousCurrentLimit = 30;
-      mIntakeMotorLeader.configAllSettings(config);
-      mIntakeMotorFollower.configAllSettings(config);
-      mIntakeMotorLeader.enableCurrentLimit(true);
-      mIntakeMotorFollower.enableCurrentLimit(true);
-      mIntakeMotorFollower.setInverted(true);
+
+        mIntakeMotor.configure(IntakeConfig.IntakerConfig.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        
+        
+      
+      
+      
+
+      
+      
 
       
     }
 
     public void setIntakePower(double speed) {
-      mIntakeMotorLeader.set(speed);
-      mIntakeMotorFollower.set(speed);
+      mIntakeMotor.set(speed);
+      
     }
     
 
     
 
     public void stopIntake() {
-      mIntakeMotorLeader.stopMotor();
-      mIntakeMotorFollower.stopMotor();
+      mIntakeMotor.stopMotor();
+      
     }
 
     

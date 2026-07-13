@@ -44,30 +44,30 @@ public final class Constants {
     //depth/frontback distance from robot center to each wheel 
 
     public static final SwerveDriveKinematics DriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(WHEEL_CENTER_DEPTH, WHEEL_CENTER_WIDTH),
         new Translation2d(WHEEL_CENTER_DEPTH, -WHEEL_CENTER_WIDTH),
-        new Translation2d(-WHEEL_CENTER_DEPTH, WHEEL_CENTER_WIDTH),
-        new Translation2d(-WHEEL_CENTER_DEPTH, -WHEEL_CENTER_WIDTH));
+        new Translation2d(WHEEL_CENTER_DEPTH, WHEEL_CENTER_WIDTH),
+        new Translation2d(-WHEEL_CENTER_DEPTH, -WHEEL_CENTER_WIDTH),
+        new Translation2d(-WHEEL_CENTER_DEPTH, WHEEL_CENTER_WIDTH));
       
     //angular offsets of module relative to chassis (rad)
-    public static final double FRONT_LEFT_CHASSIS_ANGULAR_OFFSET = 3*Math.PI/2; //spinning backword try: 3pi/2
-    public static final double FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET = 0; //still off by pi
-    public static final double BACK_LEFT_CHASSIS_ANGULAR_OFFSET = Math.PI; //spinning backword
-    public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = Math.PI/2; // try pi/2
+    public static final double FRONT_LEFT_CHASSIS_ANGULAR_OFFSET = 0; //spinning backword try: 3pi/2
+    public static final double FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET = 3 * Math.PI/2; //still off by pi
+    public static final double BACK_LEFT_CHASSIS_ANGULAR_OFFSET = Math.PI/2; //spinning backword
+    public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = Math.PI; // try pi/2
     //backright old -1 * (Math.PI/2)
     //SPARK MAX CAN IDs987ytfdxz
-    public static final int FRONT_LEFT_DRIVING_CAN_ID = 4;
-    public static final int FRONT_LEFT_TURNING_CAN_ID = 3;
+    public static final int FRONT_LEFT_DRIVING_CAN_ID = 6;
+    public static final int FRONT_LEFT_TURNING_CAN_ID = 5;
 
     
-    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 2;
-    public static final int FRONT_RIGHT_TURNING_CAN_ID = 1;
+    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 3;
+    public static final int FRONT_RIGHT_TURNING_CAN_ID = 4;
     
-    public static final int BACK_LEFT_DRIVING_CAN_ID = 6;
-    public static final int BACK_LEFT_TURNING_CAN_ID = 5;
+    public static final int BACK_LEFT_DRIVING_CAN_ID = 8;
+    public static final int BACK_LEFT_TURNING_CAN_ID = 7;
    
-    public static final int BACK_RIGHT_DRIVING_CAN_ID = 8;
-    public static final int BACK_RIGHT_TURNING_CAN_ID = 7;
+    public static final int BACK_RIGHT_DRIVING_CAN_ID = 2;
+    public static final int BACK_RIGHT_TURNING_CAN_ID = 1;
     
     public static final double INTAKE_ALIGN_KP = 0.0001;
     public static final double DIAGONAL_ALIGN_kP = 0.0001;
@@ -304,10 +304,9 @@ public final class Constants {
     }
   
   public static final class IntakeConstants {
-        public static final int INTAKE_LEADER_ID = 0; //TODO: correct this once krillpler is built
-        public static final int INTAKE_FOLLOWER_ID = 0;
-        public static final double INTAKING_FULL_POWER = 1; 
-        public static final double INTAKING_PARTIAL_POWER = 0.5;
+        public static final int INTAKE_LEADER_ID = 15;
+        public static final double INTAKING_FULL_POWER = 0.5; 
+        public static final double INTAKING_PARTIAL_POWER = 0.2;
         public static final int LEADER_FORWARD_CHANNEL = 0;
         public static final int FOLLOWER_FORWARD_CHANNEL = 0;
         public static final int LEADER_REVERSE_CHANNEL = 1;
@@ -316,10 +315,10 @@ public final class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final int SHOOTER_LEADER_CANID = 14;
-        public static final int SHOOTER_FOLLOWER_CANID = 15;
-        public static final int SHOOTER_FEEDER_LEADER_CANID = 16; 
-        public static final int SHOOTER_FEEDER_FOLLOWER_CANID = 17;// updated from rev hardware client 2
+        public static final int SHOOTER_LEADER_CANID = 16;
+        public static final int SHOOTER_FOLLOWER_CANID = 17;
+        //public static final int SHOOTER_FEEDER_LEADER_CANID = 16; 
+        //public static final int SHOOTER_FEEDER_FOLLOWER_CANID = 17;// updated from rev hardware client 2
 
         // PIDF Values
         public static final double LEADER_Kp = 0.0000709999; // 0.00061;
@@ -337,7 +336,7 @@ public final class Constants {
         public static final double KP_INCREMENT = 0.001;
         public static final double KI_INCREMENT = 0.0001;
         public static final double KD_INCREMENT = 0.0001;
-        public static final double HUB_RPM = 4000;
+        public static final double HUB_RPM = -4000;
         public static final Rotation2d HUB_RPM_ANGLE = Rotation2d.fromDegrees(20);
 
         
@@ -373,10 +372,10 @@ public final class Constants {
       public static final double OUTTAKE_HOPPER_SPEED = -0.5;
 
       // TODO: update these once krillpler is built
-      public static final int TOP_ROLLERS_ID = 0;
-      public static final int TOP_BELTS_ID = 0;
-      public static final int BOTTOM_BELTS_ID = 0;
-      public static final int INDEXER_ID = 0;
+      public static final int TOP_ROLLERS_ID = 13;
+      public static final int TOP_BELTS_ID = 14;
+      public static final int ROLLER_FLOOR_ID = 10; 
+      public static final int INDEXER_ID = 11;
     }
 
     public static final class TurretConstants {

@@ -43,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //initialized variables 
     private double mTargetRPM;
     private double ShooterRPMOffset = 0; 
-    private boolean mShooterEnabled = false;
+    private boolean mShooterEnabled = true;
     public boolean DistanceEstimationEnabled = false;
     private boolean atSpeed = false; // SHOULD THIS BE STATIC if it is accessed in the shootButCheckCommand
     public static double shooterRPM = 0;
@@ -110,6 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean isAtSpeed(){
         return atSpeed;
     }
+    
 
     public void hoodAim(Rotation2d angle){
         //hood.set((angle.getRadians() - ShooterConstants.MIN_HOOD_ANGLE.getRadians()) 
@@ -139,6 +140,13 @@ public class ShooterSubsystem extends SubsystemBase {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
               });
     }
+    public Command runShooterCommand() {
+         return run(
+        () -> {
+            runShooterPower(-1);
+              });
+    }
+
     
     //toggles
     public Command toggleShooterCommand() {
@@ -153,6 +161,7 @@ public class ShooterSubsystem extends SubsystemBase {
       return new InstantCommand(() -> changeShootingRPMOffset(-ShooterConstants.RPMOFFSET_INCREMENT));
     }
 
+
     
 
 
@@ -162,15 +171,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-      updateRPMs();  
+      //updateRPMs();  
+        runShooterPower(-0.5);
         
-        
-
+        /* 
         if (mShooterEnabled) {
             setShooterSpeeds(mTargetRPM, ShooterRPMOffset);
         } else {
             runShooterPower(0);
         }
+        */
 
         SmartDashboard.putNumber("Shooter/Target RPM", mTargetRPM + ShooterRPMOffset);
         SmartDashboard.putNumber("Shooter/Actual RPM", mShooterLeaderEncoder.getVelocity());
