@@ -365,8 +365,8 @@ public final class Constants {
     //this is nathans code, yet to be tested
 
     public static final class HopperConstants {
-      public static final double HOPPER_FAST_SPEED = 0.8;
-      public static final double BELT_FAST_SPEED = 0.8;
+      public static final double HOPPER_FAST_SPEED = 1;
+      public static final double BELT_FAST_SPEED = 1;
       public static final double HOPPER_SLOW_SPEED = 0.5;
       public static final double BELT_SLOW_SPEED = 0.5;
       public static final double OUTTAKE_HOPPER_SPEED = -0.5;

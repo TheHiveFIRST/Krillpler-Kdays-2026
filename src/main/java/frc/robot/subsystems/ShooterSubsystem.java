@@ -143,9 +143,16 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command runShooterCommand() {
          return run(
         () -> {
-            runShooterPower(-1);
+            runShooterPower(-0.7);
               });
     }
+    public Command stopShooterCommand() {
+         return run(
+        () -> {
+            runShooterPower(0);
+              });
+    }
+    
 
     
     //toggles
@@ -172,7 +179,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
       //updateRPMs();  
-        runShooterPower(-0.5);
+        
         
         /* 
         if (mShooterEnabled) {

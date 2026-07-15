@@ -47,13 +47,13 @@ public class HopperSubsystem extends SubsystemBase{
         mBelts.set(speed);
         mIndexer.set(-speed);
         mRollerFloor.set(speed);
-        mTopRoller.set(0.5 * speed);
+        mTopRoller.set(speed);
     }
     public void runShootUnjam(double speed) {
         mBelts.set(speed);
         mIndexer.set(-speed);
-        mRollerFloor.set(-speed);
-        mTopRoller.set(-speed);
+        mRollerFloor.set(-0.3 * speed);
+        mTopRoller.set(-0.3 * speed);
     }
 
     public void stopShooting() {

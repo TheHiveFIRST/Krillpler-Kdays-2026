@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -24,12 +25,13 @@ import frc.robot.configs.ShootConfig.ShooterConfig;
 public class IntakeSubsystem extends SubsystemBase {
   // declare motors/controllers here
     private final SparkMax mIntakeMotor;
-    
+    private final RelativeEncoder mIntakeEncoder;
     
     public static boolean isIntaking = false;
     
     public IntakeSubsystem() {
        mIntakeMotor = new SparkMax(15, MotorType.kBrushless);
+       mIntakeEncoder = mIntakeMotor.getEncoder();
         
 
 
@@ -47,13 +49,18 @@ public class IntakeSubsystem extends SubsystemBase {
       
     }
 
-    public void setIntakePower(double speed) {
-      mIntakeMotor.set(speed);
+    public void setIntakePower(double power) {
+      mIntakeMotor.set(power);
       
     }
-    
 
-    
+    public double getIntakeSpeed() {
+      return mIntakeEncoder.getVelocity();
+    }
+
+    public void runIntakeSpeed(double speed){
+      setIntakePower((speed - getIntakeSpeed()) * 0.01);
+    }
 
     public void stopIntake() {
       mIntakeMotor.stopMotor();
@@ -69,11 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command runIntakeCommand() {
          return run(
         () -> {
-          if (HopperSubsystem.isShooting) {
-            setIntakePower(IntakeConstants.INTAKING_PARTIAL_POWER);
-          } else {
-          setIntakePower(IntakeConstants.INTAKING_FULL_POWER);
-          }
+          runIntakeSpeed(2000);
             isIntaking = true;
             
               });

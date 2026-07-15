@@ -65,16 +65,16 @@ public class RobotContainer {
             () -> {
             double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
             mDriveSubsystem.driveJoystick(
-                MathUtil.applyDeadband(-mDriverController.getLeftY()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                MathUtil.applyDeadband(-mDriverController.getLeftX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
+                MathUtil.applyDeadband(Math.pow(-mDriverController.getLeftY(), 3)*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
+                MathUtil.applyDeadband(Math.pow(-mDriverController.getLeftX(), 3)*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 true);},
             mDriveSubsystem));
 
        
-        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
+        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.runIntakeCommand());
         mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
-        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.runShooterCommand());
+        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.stopShooterCommand());
         //mTurretSubsystem.setDefaultCommand(mTurretSubsystem.stopTurretCommand());
         
         
@@ -85,16 +85,16 @@ public class RobotContainer {
       
         //OPERATOR CONTROLS
         //shooter toggle
-        mOperatorController.y().onTrue(mShooterSubsystem.toggleShooterCommand());
-        //will toggle the regression: if this is pressed then the shooter will run at hub RPM (manual adjustments are allowed)
+        
+        //will toggle the regression: if this is pressed then the shooter will run at hub RPM (manual adjustments are allowed) - hayden was here btw. thanks for the citrus sticker.
         //mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
         //manual turret controls
         //mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
         //mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
         //mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
         //manual shooting power controls
-        mOperatorController.rightBumper().onTrue(mShooterSubsystem.increaseShootingRPMOffsetCommand());
-        mOperatorController.leftBumper().onTrue(mShooterSubsystem.decreaseShootingRPMOffsetCommand());
+        mOperatorController.leftBumper().whileTrue(mShooterSubsystem.runShooterCommand());
+        
 
         
 
@@ -106,7 +106,7 @@ public class RobotContainer {
         
         //will enable slowmode when shooting
         mDriverController.rightBumper().whileTrue(RunHopperUnjam().repeatedly());
-        mDriverController.rightBumper().onChange(toggleSlowMode());
+        mDriverController.rightBumper().whileTrue(mShooterSubsystem.runShooterCommand());
         
         //retracts the intake and stops the rollers
         //mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
