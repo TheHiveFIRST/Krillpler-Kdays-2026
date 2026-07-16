@@ -3,6 +3,7 @@ package frc.robot.configs;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import frc.robot.Constants.ShooterConstants;
 
 
 
@@ -16,13 +17,13 @@ public final class ShootConfig {
             // Leader configuration
             shooterLeaderConfig
                    
-                .smartCurrentLimit(30)
+                .smartCurrentLimit(ShooterConstants.SHOOTER_CURRENT_LIMIT)
                 .idleMode(IdleMode.kCoast);
-            // Follower configuration - set to follow Leader (ID 14) and invert
+            
             shooterFollowerConfig
-                //.follow(ShooterConstants.SHOOTER_LEADER_CANID, true)
+                
                 .inverted(true) 
-                .smartCurrentLimit(30)
+                .smartCurrentLimit(ShooterConstants.SHOOTER_CURRENT_LIMIT)
                 .idleMode(IdleMode.kCoast);
 
             

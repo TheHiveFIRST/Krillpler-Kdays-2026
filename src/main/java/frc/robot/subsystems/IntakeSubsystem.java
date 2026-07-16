@@ -7,7 +7,7 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.configs.IntakeConfig;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -16,7 +16,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     //constructor
     public IntakeSubsystem() {
-      mIntakeMotor = new SparkMax(15, MotorType.kBrushless);
+      mIntakeMotor = new SparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
       mIntakeMotor.configure(IntakeConfig.IntakerConfig.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
@@ -33,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command runIntakeCommand() {
          return run(
         () -> {
-          setIntakePower(1);
+          setIntakePower(IntakeConstants.INTAKING_POWER);
               });
     }
 
@@ -47,7 +47,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command reverseIntakeCommand() {
          return run(
         () -> {
-            setIntakePower(-0.5);
+            setIntakePower(-IntakeConstants.INTAKING_REVERSE_POWER);
               });
     }
 }

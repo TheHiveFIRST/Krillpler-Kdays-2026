@@ -2,7 +2,7 @@ package frc.robot;
 
 import java.util.Optional;
 
-import javax.net.ssl.TrustManagerFactory;
+
 //hi
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -167,196 +167,37 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER = 0;
     public static final int OPERATOR_CONTROLLER = 1;
-    public static final double DRIVE_DEADBAND = 0.05; 
+    public static final double DRIVE_DEADBAND = 0.0005; 
   }
 
-  public static final class AutoConstants {
-    //add constants here that are not in pathplanner/limelight if needed
-    public static final double X_TAG_ALIGNMENT_P = 0.01; 
-    public static final double Y_TAG_ALIGNMENT_P = 0.1; 
-    public static final double ROT_TAG_ALIGNMENT_P = 0.1; 
+  
 
-    public static final double ROT_SETPOINT_TAG_ALIGNMENT = 0;  //  RY Rotation
-    public static final double ROT_TOLERANCE_TAG_ALIGNMENT = 1;
-    
-    public static final double X_SETPOINT_TAG_ALIGNMENT = 9.79;  //tx Vertical pose and tolerance 
-    public static final double X_TOLERANCE_TAG_ALIGNMENT = 0.02;
-
-    public static final double Y_SETPOINT_TAG_ALIGNMENT = -0.19;  // tz Horizontal pose (- for diff sides of tag)
-    public static final double Y_TOLERANCE_TAG_ALIGNMENT = 0.02; 
-
-    public static final double DONT_SEE_TAG_WAIT_TIME = 1;
-    public static final double POSE_VALIDATION_TIME = 0.3;
-  }
-
-  public static final class VisionConstants{
-   public static final double LL_MOUNT_ANGLE_DEG = 0; //a1: degrees rotated up from vertical 
-   public static final double LL_LENS_HEIGHT_IN = 7.1; //h1: distance from lens to floor 
-   public static final double TARGET_HEIGHT_IN = 12.5;//44.25; //h2: height of target 
-   public static final double robotToCameraX = 0;//X distance from center of robot to camera
-   public static final double robotToCameraY = 0;//Y distance from center of robot to camera
-   public static final double robotToCameraZ = 0;//Z distance from center of robot to camera
-  }
+  
 
   public static final class MotorConstants {
     public static final double FREE_SPEED_RPM = 5676;
   } 
 
-  public static final class CalcConstants { // Bahhhh all the comments are going to fry me...
-      //  FIELD GEOMETRY
-      //  Where the target is on the field. I would like to pull this from the existing hub position if possible.
-      // I do not want to make 2 different hubs for no reason. So if we could change this for later that would be great.
-      // TODO: change this to reference the real hub pose instead of hardcoding it here.
   
-      // Hug coordinates. Please tune. In METERS
-      public static final Translation2d HUB_POSITION = new Translation2d(8.23, 4.11);
-  
-      // Height of the target opening above the floor, METRES. TODO: Tune this.
-      public static final double TARGET_HEIGHT_METERS = 2.64;
-  
-      // Height of the shooter exit above the floor, METRES. TODO: Tune this.
-      public static final double SHOOTER_HEIGHT_METERS = 0.60;
-
-
-      //  TURRET CONSTRAINTS  (the wiring limit -- it canNOT spin forever)
-      //  All angles in DEGREES, turret-relative (0 = pointing straight forward
-      //  off the chassis). The calculator clamps every output into this range.
-  
-      // Most negative angle the turret can mechanically/safely reach. TODO: Tune this.
-      public static final double TURRET_MIN_DEG = -200.0;
-  
-      // Most positive angle the turret can reach. TODO: Tune this. 
-      public static final double TURRET_MAX_DEG = 200.0;
-  
-      /** A soft buffer kept away from each hard limit, DEGREES. The calculator
-       *  will not command an angle inside this buffer, so the turret never slams
-       *  the hard stop / strains the wiring. TODO: Tune this. */
-      public static final double TURRET_SAFETY_BUFFER_DEG = 5.0;
-
-  
-      //  HOOD CONSTRAINTS  (it canNOT extend infinitely) -- Lmk if you prefer CANNOT or canNOT
-      //  Servo position is the [0,1] command; angle is the physical launch angle
-      //  that position produces. The map between them is assumed LINEAR; if the
-      //  hood is on a linkage and is NOT linear, replace the linear map in the
-      //  calculator with a measured lookup table.
-  
-      // Launch angle at servo position 0.0, DEGREES. TUNE (measure it). 
-      public static final double HOOD_MIN_ANGLE_DEG = 20.0;
-  
-      // Launch angle at servo position 1.0, DEGREES. TUNE (measure it). 
-      public static final double HOOD_MAX_ANGLE_DEG = 70.0;
-  
-      // Lowest servo position the hood is allowed to command, [0,1]. TODO: Tune this. Please.
-      public static final double HOOD_MIN_SERVO = 0.0;
-  
-      // Highest servo position the hood is allowed to command, [0,1]. TODO: Tune this.
-      public static final double HOOD_MAX_SERVO = 1.0;
-  
-
-      //  FLYWHEEL / SHOOTER GEOMETRY
-      //  Used to convert a required launch velocity (m/s) into a flywheel RPM.
-  
-      // Flywheel wheel radius, METRES. TODO: Tune this. Again...
-      public static final double WHEEL_RADIUS_METERS = 0.0508; // ~2 in, example. Tune again
-  
-      /** Gear ratio between motor and flywheel wheel (motor turns : wheel turns).
-       *  1.0 if direct drive. TODO: Tune this. Again.... */
-      public static final double FLYWHEEL_GEAR_RATIO = 1.0;
-  
-      /** Efficiency factor: real exit speed is lower than ideal wheel surface
-       *  speed because the ball slips/compresses. 1.0 = perfect, ~0.5-0.8 typical.
-       *  TODO: Tune this on the real shooter. */
-      public static final double SHOOTER_EFFICIENCY = 1.0;
-  
-      //  SHOT VALIDITY  (when is a firing solution even reasonable?)
-      //  Distances in METRES.
-  
-      /** Closest distance a shot is considered valid, METRES. TODO: Tune this. */
-      public static final double MIN_SHOT_DISTANCE = 0.5;
-  
-      /** Farthest distance a shot is considered valid, METRES. TODO: Tune this. */
-      public static final double MAX_SHOT_DISTANCE = 8.0;
-
-
-      //  LOOKUP TABLES  (distance METRES -> RPM, and distance METRES -> hood servo)
-      //  VALUES MUST BE RE-MEASURED for the new robot. The arrays are {distance, value} pairs.
-      //  The calculator loads these into InterpolatingDoubleTreeMaps.
-  
-      // {distanceMeters, rpm}. TODO: Tune every row on the real robot. 
-      public static final double[][] RPM_TABLE = {
-          {1.0, 2850.0},
-          {1.5, 3300.0},
-          {2.0, 3500.0},
-          {2.5, 3650.0},
-          {3.0, 3800.0},
-          {4.0, 4000.0},
-      };
-  
-      // Did I forget to mention TODO: TUNE!!
-      public static final double[][] HOOD_TABLE = {
-          {1.0, 0.90},
-          {1.5, 0.60},
-          {2.0, 0.45},
-          {2.5, 0.35},
-          {3.0, 0.30},
-          {4.0, 0.20},
-      };
-    }
   
   public static final class IntakeConstants {
-        public static final int INTAKE_LEADER_ID = 15;
-        public static final double INTAKING_FULL_POWER = 0.5; 
-        public static final double INTAKING_PARTIAL_POWER = 0.2;
-        public static final int LEADER_FORWARD_CHANNEL = 0;
-        public static final int FOLLOWER_FORWARD_CHANNEL = 0;
-        public static final int LEADER_REVERSE_CHANNEL = 1;
-        public static final int FOLLOWER_REVERSE_CHANNEL = 1;
+        public static final int INTAKE_MOTOR_ID = 15;
+        public static final int INTAKE_CURRENT_LIMIT = 40;
+        public static final double INTAKING_POWER = 1; 
+        public static final double INTAKING_REVERSE_POWER = 0.5;
+        
         
     }
 
     public static final class ShooterConstants {
         public static final int SHOOTER_LEADER_CANID = 16;
         public static final int SHOOTER_FOLLOWER_CANID = 17;
-        //public static final int SHOOTER_FEEDER_LEADER_CANID = 16; 
-        //public static final int SHOOTER_FEEDER_FOLLOWER_CANID = 17;// updated from rev hardware client 2
-
-        // PIDF Values
-        public static final double LEADER_Kp = 0.0000709999; // 0.00061;
-        public static final double LEADER_Kd = 0; //0.00003;
-        public static final double LEADER_Ki = 0; //0.000019998;
-        public static final double LEADER_FF_kS = 0.0;
-        public static final double LEADER_FF_kV = 0.00012;
-        public static final double LEADER_FF_kA = 0.0002;
-
         
-    
-        // Manual Control 
-        public static final double RPM_INCREMENT = 12.5;
-        public static final double KV_INCREMENT = 0.000001;
-        public static final double KP_INCREMENT = 0.001;
-        public static final double KI_INCREMENT = 0.0001;
-        public static final double KD_INCREMENT = 0.0001;
-        public static final double HUB_RPM = -4000;
-        public static final Rotation2d HUB_RPM_ANGLE = Rotation2d.fromDegrees(20);
+        public static final double POWEROFFSET_INCREMENT = 0.05;
+        public static final double SHOOTER_BASE_POWER = 0.7;
 
+        public static final int SHOOTER_CURRENT_LIMIT = 30;
         
-        ;
-        
-
-        public static final double VELOCITY_TOLERANCE =  30; 
-        
-
-        
-
-        public static final double RPMOFFSET_INCREMENT = 200;
-        //hood constants 
-
-        public static final double HOOD_ANGLE_TO_SERVO_MULTIPLIER = 1.909859317;
-        public static final Rotation2d MIN_HOOD_ANGLE = Rotation2d.fromDegrees(16.172); 
-        
-
-        //untested kinematics equation
-                   // 0.80–0.95, tune this
 
     }
     //intake.retract(7s);;; [
@@ -371,6 +212,8 @@ public final class Constants {
       public static final double BELT_SLOW_SPEED = 0.5;
       public static final double OUTTAKE_HOPPER_SPEED = -0.5;
 
+      public static final int HOPPER_CURRENT_LIMIT = 25;
+
       // TODO: update these once krillpler is built
       public static final int TOP_ROLLERS_ID = 13;
       public static final int TOP_BELTS_ID = 14;
@@ -378,21 +221,13 @@ public final class Constants {
       public static final int INDEXER_ID = 11;
     }
 
-    public static final class TurretConstants {
-      //TODO: correct these once krillpler is wired
-      public static final int TURRET_MOTOR_ID = 0;
-      public static final double TURRET_LOOP_POINT = 0; //measured in radians on domain (0, 2pi)
-      // 0 is turret facing forwards
-      public static final float TURRET_KP = 0;
-      public static final float TURRET_KD = 0;
-      public static final float TURRET_KI = 0;
-
-      public static final double MOTOR_ROTATIONS_PER_TURRET_ROTATION = 11/128;
-
-
-      
-      
+    public static final class UnjamSequenceConstants{
+      public static final double FORWARD_TIME = 0.5;
+      public static final double BACKWARD_TIME = 0.2;
+      public static final double BUFFER_TIME = 0.01;
     }
+
+    
 
 
 

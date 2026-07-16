@@ -1,33 +1,23 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.MutAngle;
-import edu.wpi.first.units.measure.MutAngularVelocity;
-import edu.wpi.first.units.measure.MutVoltage;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+//un-comment this if you need smartDashbord to run diagnostics
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants;
+
 
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.configs.ShootConfig.ShooterConfig;
 
-import frc.robot.subsystems.DriveSubsystem;
 
-import static edu.wpi.first.units.Units.*;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -64,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command runShooterCommand() {
          return run(
         () -> {
-            runShooterPower(0.7 + ShooterPowerOffset);
+            runShooterPower(ShooterConstants.SHOOTER_BASE_POWER + ShooterPowerOffset);
               });
     }
 
@@ -78,11 +68,11 @@ public class ShooterSubsystem extends SubsystemBase {
     //Power adjustment
     
         public Command increaseShootingRPMOffsetCommand(){
-    return new InstantCommand(() -> changeShootingPowerOffset(ShooterConstants.RPMOFFSET_INCREMENT));
+    return new InstantCommand(() -> changeShootingPowerOffset(ShooterConstants.POWEROFFSET_INCREMENT));
     }
     
     public Command decreaseShootingRPMOffsetCommand(){
-      return new InstantCommand(() -> changeShootingPowerOffset(-ShooterConstants.RPMOFFSET_INCREMENT));
+      return new InstantCommand(() -> changeShootingPowerOffset(-ShooterConstants.POWEROFFSET_INCREMENT));
     }
 
     @Override

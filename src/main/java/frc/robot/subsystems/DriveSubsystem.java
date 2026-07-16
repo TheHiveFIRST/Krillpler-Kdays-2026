@@ -47,9 +47,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.VisionConstants;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import static edu.wpi.first.units.Units.Degrees;

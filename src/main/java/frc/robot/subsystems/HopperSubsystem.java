@@ -94,7 +94,7 @@ public class HopperSubsystem extends SubsystemBase{
     public Command reverseCommand() {
         return run(
             () -> {
-                runHopper(-1);
+                runHopper(-HopperConstants.HOPPER_SLOW_SPEED);
             });
     }
 

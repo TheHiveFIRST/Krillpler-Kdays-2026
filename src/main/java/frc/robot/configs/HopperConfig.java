@@ -9,7 +9,7 @@ public final class HopperConfig {
     public static void configure(WPI_TalonSRX motor) {
         motor.configFactoryDefault();        
         motor.setNeutralMode(NeutralMode.Brake);
-        motor.configContinuousCurrentLimit(25);
+        motor.configContinuousCurrentLimit(HopperConstants.HOPPER_CURRENT_LIMIT);
         motor.enableCurrentLimit(true);
     }
 }
