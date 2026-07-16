@@ -76,7 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command runIntakeCommand() {
          return run(
         () -> {
-          runIntakeSpeed(2000);
+          setIntakePower(1);
             isIntaking = true;
             
               });
@@ -91,10 +91,10 @@ public class IntakeSubsystem extends SubsystemBase {
               });
     }
 
-    public Command deployIntakeCommand() {
+    public Command revereIntakeCommand() {
          return run(
         () -> {
-            
+            setIntakePower(-0.5);
               });
     }
 

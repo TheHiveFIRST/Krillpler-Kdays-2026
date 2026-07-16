@@ -65,14 +65,14 @@ public class RobotContainer {
             () -> {
             double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
             mDriveSubsystem.driveJoystick(
-                MathUtil.applyDeadband(Math.pow(-mDriverController.getLeftY(), 3)*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
-                MathUtil.applyDeadband(Math.pow(-mDriverController.getLeftX(), 3)*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
+                MathUtil.applyDeadband((-mDriverController.getLeftY() * -mDriverController.getLeftY() * -mDriverController.getLeftY())*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
+                MathUtil.applyDeadband((-mDriverController.getLeftX() * -mDriverController.getLeftX() * -mDriverController.getLeftX())*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 true);},
             mDriveSubsystem));
 
        
-        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.runIntakeCommand());
+        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
         mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
         mShooterSubsystem.setDefaultCommand(mShooterSubsystem.stopShooterCommand());
         //mTurretSubsystem.setDefaultCommand(mTurretSubsystem.stopTurretCommand());
@@ -94,7 +94,8 @@ public class RobotContainer {
         //mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
         //manual shooting power controls
         mOperatorController.leftBumper().whileTrue(mShooterSubsystem.runShooterCommand());
-        
+         mOperatorController.povDown().whileTrue(mIntakeSubsystem.revereIntakeCommand());
+        mOperatorController.povDown().whileTrue(mhoppersubsystem.reverseCommand());
 
         
 
@@ -111,8 +112,8 @@ public class RobotContainer {
         //retracts the intake and stops the rollers
         //mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
         //removed because apparently we have a roller floor now
- 
-        
+        mDriverController.povUp().whileTrue(mIntakeSubsystem.revereIntakeCommand());
+       
         mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
 
@@ -134,7 +135,7 @@ public class RobotContainer {
         return mhoppersubsystem.runShootCommand();
     }
     public Command RunHopperUnjam(){
-        return new shootUnjamSequence(mhoppersubsystem);
+        return new shootUnjamSequence(mhoppersubsystem, mIntakeSubsystem);
     }
 
   

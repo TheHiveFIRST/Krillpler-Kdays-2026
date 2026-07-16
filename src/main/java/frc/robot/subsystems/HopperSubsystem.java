@@ -49,11 +49,16 @@ public class HopperSubsystem extends SubsystemBase{
         mRollerFloor.set(speed);
         mTopRoller.set(speed);
     }
+    public void runHopper(double speed) {
+        
+        mRollerFloor.set(speed);
+        mTopRoller.set(speed);
+    }
     public void runShootUnjam(double speed) {
         mBelts.set(speed);
         mIndexer.set(-speed);
-        mRollerFloor.set(-0.3 * speed);
-        mTopRoller.set(-0.3 * speed);
+        mRollerFloor.set(-0.1 * speed);
+        mTopRoller.set(-0.1 * speed);
     }
 
     public void stopShooting() {
@@ -88,12 +93,19 @@ public class HopperSubsystem extends SubsystemBase{
                 }
             });
     }
+
     
 
     public Command stopShootingCommand() {
         return run(
             () -> {
                 stopShooting();
+            });
+    }
+    public Command reverseCommand() {
+        return run(
+            () -> {
+                runHopper(-1);
             });
     }
 

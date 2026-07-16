@@ -143,7 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command runShooterCommand() {
          return run(
         () -> {
-            runShooterPower(-0.7);
+            runShooterPower(0.7);
               });
     }
     public Command stopShooterCommand() {
