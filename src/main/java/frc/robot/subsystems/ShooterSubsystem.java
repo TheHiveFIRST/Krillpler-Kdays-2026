@@ -67,11 +67,11 @@ public class ShooterSubsystem extends SubsystemBase {
     
     //Power adjustment
     
-        public Command increaseShootingRPMOffsetCommand(){
+        public Command increaseShootingPowerOffsetCommand(){
     return new InstantCommand(() -> changeShootingPowerOffset(ShooterConstants.POWEROFFSET_INCREMENT));
     }
     
-    public Command decreaseShootingRPMOffsetCommand(){
+    public Command decreaseShootingPowerOffsetCommand(){
       return new InstantCommand(() -> changeShootingPowerOffset(-ShooterConstants.POWEROFFSET_INCREMENT));
     }
 

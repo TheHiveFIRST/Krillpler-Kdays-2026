@@ -73,33 +73,36 @@ public class RobotContainer {
     
     private void configureBindings() {
       
-        //OPERATOR CONTROLS
+        //THERE ARE NO OPERATOR CONTROLS
        
-        mOperatorController.leftBumper().whileTrue(mShooterSubsystem.runShooterCommand());
+        
         //POV down is used for unjamming
-        mOperatorController.povDown().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
-        mOperatorController.povDown().whileTrue(mhoppersubsystem.reverseCommand());
+        mDriverController.x().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
+        mDriverController.x().whileTrue(mhoppersubsystem.reverseCommand());
+
+        mDriverController.y().onTrue(mShooterSubsystem.increaseShootingPowerOffsetCommand());
+        mDriverController.b().onTrue(mShooterSubsystem.decreaseShootingPowerOffsetCommand());
 
         
 
 
-        //DRIVER CONTROLS
         
         
-        mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
+        
+        mDriverController.leftTrigger(0.3).whileTrue(mIntakeSubsystem.runIntakeCommand());
         
         //Shooter will automatically turn on when the shoot button is pressed, and considering
         //krillpler's BPS, there isnt much need to spin up beforehand
-        mDriverController.rightBumper().whileTrue(RunHopperUnjam().repeatedly());
-        mDriverController.rightBumper().whileTrue(mShooterSubsystem.runShooterCommand());
+        mDriverController.rightTrigger(0.3).whileTrue(RunHopperUnjam().repeatedly());
+        mDriverController.rightTrigger(0.3).whileTrue(mShooterSubsystem.runShooterCommand());
         
         //for passing/unjamming/human player feeding
-        mDriverController.povUp().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
+        mDriverController.leftBumper().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
        
         //driving utilities
-        mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
+        mDriverController.a().whileTrue(mDriveSubsystem.defensePosition());
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
-        mDriverController.rightTrigger(0.3).onChange(toggleSlowMode());
+        mDriverController.rightBumper().onChange(toggleSlowMode());
 
     }
 
