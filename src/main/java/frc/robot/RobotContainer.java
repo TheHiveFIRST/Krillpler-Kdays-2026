@@ -2,8 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.autonomousTurretOperationCommand;
-import frc.robot.commands.shootButCheckCommand;
+
 import frc.robot.commands.shootUnjamSequence;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
+
 
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -47,24 +46,14 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    
-    
 
-    
-
-   
-
-
-
-    
-    
-    
     configureBindings();
     mDriveSubsystem.setDefaultCommand(  
     new RunCommand(
             () -> {
             double currentDriveSpeed = slowMode ? DriveConstants.DRIVE_SPEED * DriveConstants.SLOW_MODE_MULTIPLIER : DriveConstants.DRIVE_SPEED;
             mDriveSubsystem.driveJoystick(
+                //translation joystick inputs are cubed, allowing for precise movement
                 MathUtil.applyDeadband((-mDriverController.getLeftY() * -mDriverController.getLeftY() * -mDriverController.getLeftY())*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband((-mDriverController.getLeftX() * -mDriverController.getLeftX() * -mDriverController.getLeftX())*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband(-mDriverController.getRightX()*currentDriveSpeed, OperatorConstants.DRIVE_DEADBAND),
@@ -72,10 +61,11 @@ public class RobotContainer {
             mDriveSubsystem));
 
        
-        mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
-        mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
-        mShooterSubsystem.setDefaultCommand(mShooterSubsystem.stopShooterCommand());
-        //mTurretSubsystem.setDefaultCommand(mTurretSubsystem.stopTurretCommand());
+    //krillpler is lazy and doesnt do anything unless you tell it to
+    mIntakeSubsystem.setDefaultCommand(mIntakeSubsystem.stopIntakeCommand());
+    mhoppersubsystem.setDefaultCommand(mhoppersubsystem.stopShootingCommand());
+    mShooterSubsystem.setDefaultCommand(mShooterSubsystem.stopShooterCommand());
+        
         
         
      }
@@ -84,17 +74,10 @@ public class RobotContainer {
     private void configureBindings() {
       
         //OPERATOR CONTROLS
-        //shooter toggle
-        
-        //will toggle the regression: if this is pressed then the shooter will run at hub RPM (manual adjustments are allowed) - hayden was here btw. thanks for the citrus sticker.
-        //mOperatorController.x().onTrue(mShooterSubsystem.toggleShooterCaulculationsCommand());
-        //manual turret controls
-        //mOperatorController.rightTrigger(0.2).whileTrue(mTurretSubsystem.runTurretClockwiseCommand());
-        //mOperatorController.leftTrigger(0.2).whileTrue(mTurretSubsystem.runTurretCounterClockwiseCommand());
-        //mOperatorController.b().onTrue(mTurretSubsystem.toggleTurretCommand());
-        //manual shooting power controls
+       
         mOperatorController.leftBumper().whileTrue(mShooterSubsystem.runShooterCommand());
-         mOperatorController.povDown().whileTrue(mIntakeSubsystem.revereIntakeCommand());
+        //POV down is used for unjamming
+        mOperatorController.povDown().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
         mOperatorController.povDown().whileTrue(mhoppersubsystem.reverseCommand());
 
         
@@ -102,20 +85,21 @@ public class RobotContainer {
 
         //DRIVER CONTROLS
         
-        //the intake is deployed by default, this just runs the rollers
+        
         mDriverController.leftBumper().whileTrue(mIntakeSubsystem.runIntakeCommand());
         
-        //will enable slowmode when shooting
+        //Shooter will automatically turn on when the shoot button is pressed, and considering
+        //krillpler's BPS, there isnt much need to spin up beforehand
         mDriverController.rightBumper().whileTrue(RunHopperUnjam().repeatedly());
         mDriverController.rightBumper().whileTrue(mShooterSubsystem.runShooterCommand());
         
-        //retracts the intake and stops the rollers
-        //mDriverController.leftTrigger(0.2).whileTrue(mIntakeSubsystem.retractIntakeCommand());
-        //removed because apparently we have a roller floor now
-        mDriverController.povUp().whileTrue(mIntakeSubsystem.revereIntakeCommand());
+        //for passing/unjamming/human player feeding
+        mDriverController.povUp().whileTrue(mIntakeSubsystem.reverseIntakeCommand());
        
+        //driving utilities
         mDriverController.x().whileTrue(mDriveSubsystem.defensePosition());
         mDriverController.start().whileTrue(mDriveSubsystem.resetGyro()); 
+        mDriverController.rightTrigger(0.3).onChange(toggleSlowMode());
 
     }
 
@@ -131,32 +115,11 @@ public class RobotContainer {
         return new InstantCommand(() -> slowMode = !slowMode);
     }
 
-    public Command RunHopperShoot(){
-        return mhoppersubsystem.runShootCommand();
-    }
+    
     public Command RunHopperUnjam(){
         return new shootUnjamSequence(mhoppersubsystem, mIntakeSubsystem);
     }
-
-  
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  
-
-  //public Command runTurretAutomatically(TurretSubsystem mTurretSubsystem, DriveSubsystem mDriveSubsystem){
-  //  return new autonomousTurretOperationCommand(mTurretSubsystem, mDriveSubsystem);
-  //}
-  
- //public Command runHopperAutomaticallyCommand(TurretSubsystem mTurretSubsystem, HopperSubsystem mHopperSubsystem, ShooterSubsystem mShooterSubsystem){
- //  return new shootButCheckCommand(mTurretSubsystem, mShooterSubsystem, mHopperSubsystem);
- //}
-    
-  
-
-   
+ 
 }
 
   

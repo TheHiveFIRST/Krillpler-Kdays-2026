@@ -17,7 +17,7 @@ public class shootUnjamSequence extends SequentialCommandGroup{
       new WaitCommand(0.01),
       new ParallelCommandGroup(
         mHopperSubsystem.runShootUnjamCommand().withTimeout(0.2),
-        mIntakeSubsystem.revereIntakeCommand().withTimeout(0.2)
+        mIntakeSubsystem.reverseIntakeCommand().withTimeout(0.2)
       ),
       
       new WaitCommand(0.01));       
